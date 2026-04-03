@@ -1,0 +1,1117 @@
+--[[
+    ______             _                         
+    |__  /            | |                        
+      / / _   _  _ __ | |__  _ __ __ ___  __     
+     / /  | | | | '_ \| '_ \| '__/ _` \ \/ /     
+    / /__ | |_| | |_) | | | | | | (_| |>  <      
+    \____|\__,| | .__/|_| |_|_|  \__,_/_/\_\     
+          __/ | | |                             
+         |___/  |_|
+
+    Rewrited from Wind UI (Footagesus) and NatUI
+    Github: https://github.com/Footagesus/WindUI
+
+	Developed by: Reyhan (Kirsia)
+	Founder by: moonshal (ZyphraxHub)
+
+	This User Interface is open source and for public usage.
+]]
+
+-- Instances: 271 | Scripts: 0 | Modules: 3 | Tags: 0
+local ZyphraxHub = {};
+
+-- ZyphraxHub
+ZyphraxHub["1"] = Instance.new("ScreenGui");
+ZyphraxHub["1"]["Name"] = [[ZyphraxHub]];
+ZyphraxHub["1"]["ZIndexBehavior"] = Enum.ZIndexBehavior.Sibling;
+ZyphraxHub["1"]["ResetOnSpawn"] = false;
+
+local cloneref = cloneref or function(...) return ... end
+
+if protect_gui then
+	protect_gui(ZyphraxHub["1"])
+elseif gethui then
+	ZyphraxHub["1"].Parent = gethui()
+elseif pcall(function() game.CoreGui:GetChildren() end) then
+	ZyphraxHub["1"].Parent = cloneref(game:GetService("CoreGui"))
+else
+	ZyphraxHub["1"].Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+end
+
+-- ZyphraxHub.Window
+ZyphraxHub["2"] = Instance.new("Frame", ZyphraxHub["1"]);
+ZyphraxHub["2"]["ZIndex"] = 0;
+ZyphraxHub["2"]["BorderSizePixel"] = 2;
+ZyphraxHub["2"]["BackgroundColor3"] = Color3.fromRGB(37, 40, 47);
+ZyphraxHub["2"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+ZyphraxHub["2"]["Size"] = UDim2.new(0, 528, 0, 334);
+ZyphraxHub["2"]["Position"] = UDim2.new(0.5278, 0, 0.5, 0);
+ZyphraxHub["2"]["BorderColor3"] = Color3.fromRGB(61, 61, 75);
+ZyphraxHub["2"]["Name"] = [[Window]];
+
+
+-- ZyphraxHub.Window.UICorner
+ZyphraxHub["3"] = Instance.new("UICorner", ZyphraxHub["2"]);
+ZyphraxHub["3"]["CornerRadius"] = UDim.new(0, 10);
+
+
+-- ZyphraxHub.Window.DropdownSelection
+ZyphraxHub["4"] = Instance.new("Frame", ZyphraxHub["2"]);
+ZyphraxHub["4"]["Visible"] = false;
+ZyphraxHub["4"]["ZIndex"] = 4;
+ZyphraxHub["4"]["BorderSizePixel"] = 0;
+ZyphraxHub["4"]["BackgroundColor3"] = Color3.fromRGB(32, 35, 41);
+ZyphraxHub["4"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+ZyphraxHub["4"]["ClipsDescendants"] = true;
+ZyphraxHub["4"]["Size"] = UDim2.new(0.7281, 0, 0.68367, 0);
+ZyphraxHub["4"]["Position"] = UDim2.new(0.5, 0, 0.5, 0);
+ZyphraxHub["4"]["BorderColor3"] = Color3.fromRGB(61, 61, 75);
+ZyphraxHub["4"]["Name"] = [[DropdownSelection]];
+
+
+-- ZyphraxHub.Window.DropdownSelection.UICorner
+ZyphraxHub["5"] = Instance.new("UICorner", ZyphraxHub["4"]);
+ZyphraxHub["5"]["CornerRadius"] = UDim.new(0, 6);
+
+
+-- ZyphraxHub.Window.DropdownSelection.UIStroke
+ZyphraxHub["6"] = Instance.new("UIStroke", ZyphraxHub["4"]);
+ZyphraxHub["6"]["ApplyStrokeMode"] = Enum.ApplyStrokeMode.Border;
+ZyphraxHub["6"]["Thickness"] = 1.5;
+ZyphraxHub["6"]["Color"] = Color3.fromRGB(61, 61, 75);
+
+
+-- ZyphraxHub.Window.DropdownSelection.TopBar
+ZyphraxHub["7"] = Instance.new("Frame", ZyphraxHub["4"]);
+ZyphraxHub["7"]["BorderSizePixel"] = 0;
+ZyphraxHub["7"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+ZyphraxHub["7"]["Size"] = UDim2.new(1, 0, 0, 50);
+ZyphraxHub["7"]["Position"] = UDim2.new(0, 0, 0, 0);
+ZyphraxHub["7"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["7"]["Name"] = [[TopBar]];
+ZyphraxHub["7"]["BackgroundTransparency"] = 1;
+
+
+-- ZyphraxHub.Window.DropdownSelection.TopBar.BoxFrame
+ZyphraxHub["8"] = Instance.new("Frame", ZyphraxHub["7"]);
+ZyphraxHub["8"]["BorderSizePixel"] = 0;
+ZyphraxHub["8"]["AnchorPoint"] = Vector2.new(1, 0.5);
+ZyphraxHub["8"]["Size"] = UDim2.new(0, 120, 0, 25);
+ZyphraxHub["8"]["Position"] = UDim2.new(1, -50, 0.5, 0);
+ZyphraxHub["8"]["Name"] = [[BoxFrame]];
+ZyphraxHub["8"]["BackgroundTransparency"] = 1;
+
+
+-- ZyphraxHub.Window.DropdownSelection.TopBar.BoxFrame.DropShadow
+ZyphraxHub["9"] = Instance.new("ImageLabel", ZyphraxHub["8"]);
+ZyphraxHub["9"]["ZIndex"] = 0;
+ZyphraxHub["9"]["BorderSizePixel"] = 0;
+ZyphraxHub["9"]["SliceCenter"] = Rect.new(49, 49, 450, 450);
+ZyphraxHub["9"]["ScaleType"] = Enum.ScaleType.Slice;
+ZyphraxHub["9"]["ImageTransparency"] = 0.75;
+-- [ERROR] cannot convert ImageContent, please report to "https://github.com/uniquadev/GuiToLuaConverter/issues"
+ZyphraxHub["9"]["ImageColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["9"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+ZyphraxHub["9"]["Image"] = [[rbxassetid://6014261993]];
+ZyphraxHub["9"]["Size"] = UDim2.new(1, 30, 1, 30);
+ZyphraxHub["9"]["BackgroundTransparency"] = 1;
+ZyphraxHub["9"]["Name"] = [[DropShadow]];
+ZyphraxHub["9"]["Position"] = UDim2.new(0.5, 0, 0.5, 0);
+
+
+-- ZyphraxHub.Window.DropdownSelection.TopBar.BoxFrame.Frame
+ZyphraxHub["a"] = Instance.new("Frame", ZyphraxHub["8"]);
+ZyphraxHub["a"]["BorderSizePixel"] = 0;
+ZyphraxHub["a"]["BackgroundColor3"] = Color3.fromRGB(43, 46, 53);
+ZyphraxHub["a"]["AutomaticSize"] = Enum.AutomaticSize.Y;
+ZyphraxHub["a"]["Size"] = UDim2.new(1, 0, 1, 0);
+ZyphraxHub["a"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+
+
+-- ZyphraxHub.Window.DropdownSelection.TopBar.BoxFrame.Frame.UICorner
+ZyphraxHub["b"] = Instance.new("UICorner", ZyphraxHub["a"]);
+ZyphraxHub["b"]["CornerRadius"] = UDim.new(0, 5);
+
+
+-- ZyphraxHub.Window.DropdownSelection.TopBar.BoxFrame.Frame.UIStroke
+ZyphraxHub["c"] = Instance.new("UIStroke", ZyphraxHub["a"]);
+ZyphraxHub["c"]["ApplyStrokeMode"] = Enum.ApplyStrokeMode.Border;
+ZyphraxHub["c"]["Thickness"] = 1.5;
+ZyphraxHub["c"]["Color"] = Color3.fromRGB(61, 61, 75);
+
+
+-- ZyphraxHub.Window.DropdownSelection.TopBar.BoxFrame.Frame.TextBox
+ZyphraxHub["d"] = Instance.new("TextBox", ZyphraxHub["a"]);
+ZyphraxHub["d"]["TextXAlignment"] = Enum.TextXAlignment.Left;
+ZyphraxHub["d"]["BorderSizePixel"] = 0;
+ZyphraxHub["d"]["TextWrapped"] = true;
+ZyphraxHub["d"]["TextTruncate"] = Enum.TextTruncate.AtEnd;
+ZyphraxHub["d"]["TextSize"] = 14;
+ZyphraxHub["d"]["TextColor3"] = Color3.fromRGB(197, 204, 219);
+ZyphraxHub["d"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+ZyphraxHub["d"]["FontFace"] = Font.new([[rbxassetid://11702779517]], Enum.FontWeight.Medium, Enum.FontStyle.Normal);
+ZyphraxHub["d"]["ClipsDescendants"] = true;
+ZyphraxHub["d"]["PlaceholderText"] = [[Input here...]];
+ZyphraxHub["d"]["Size"] = UDim2.new(1, -25, 1, 0);
+ZyphraxHub["d"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["d"]["Text"] = [[]];
+ZyphraxHub["d"]["BackgroundTransparency"] = 1;
+
+
+-- ZyphraxHub.Window.DropdownSelection.TopBar.BoxFrame.Frame.TextBox.UIPadding
+ZyphraxHub["e"] = Instance.new("UIPadding", ZyphraxHub["d"]);
+ZyphraxHub["e"]["PaddingTop"] = UDim.new(0, 10);
+ZyphraxHub["e"]["PaddingRight"] = UDim.new(0, 10);
+ZyphraxHub["e"]["PaddingLeft"] = UDim.new(0, 10);
+ZyphraxHub["e"]["PaddingBottom"] = UDim.new(0, 10);
+
+
+-- ZyphraxHub.Window.DropdownSelection.TopBar.BoxFrame.Frame.ImageButton
+ZyphraxHub["f"] = Instance.new("ImageButton", ZyphraxHub["a"]);
+ZyphraxHub["f"]["BorderSizePixel"] = 0;
+ZyphraxHub["f"]["BackgroundTransparency"] = 1;
+-- [ERROR] cannot convert ImageContent, please report to "https://github.com/uniquadev/GuiToLuaConverter/issues"
+ZyphraxHub["f"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+ZyphraxHub["f"]["ImageColor3"] = Color3.fromRGB(197, 204, 219);
+ZyphraxHub["f"]["AnchorPoint"] = Vector2.new(1, 0.5);
+ZyphraxHub["f"]["Image"] = [[rbxassetid://86928976705683]];
+ZyphraxHub["f"]["Size"] = UDim2.new(0, 15, 0, 15);
+ZyphraxHub["f"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["f"]["Position"] = UDim2.new(1, -5, 0.5, 0);
+
+
+-- ZyphraxHub.Window.DropdownSelection.TopBar.Close
+ZyphraxHub["10"] = Instance.new("ImageButton", ZyphraxHub["7"]);
+ZyphraxHub["10"]["BorderSizePixel"] = 0;
+ZyphraxHub["10"]["BackgroundTransparency"] = 1;
+-- [ERROR] cannot convert ImageContent, please report to "https://github.com/uniquadev/GuiToLuaConverter/issues"
+ZyphraxHub["10"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+ZyphraxHub["10"]["ImageColor3"] = Color3.fromRGB(197, 204, 219);
+ZyphraxHub["10"]["ZIndex"] = 0;
+ZyphraxHub["10"]["AnchorPoint"] = Vector2.new(1, 0.5);
+ZyphraxHub["10"]["Image"] = [[rbxassetid://132453323679056]];
+ZyphraxHub["10"]["Size"] = UDim2.new(0, 25, 0, 25);
+ZyphraxHub["10"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["10"]["Name"] = [[Close]];
+ZyphraxHub["10"]["Position"] = UDim2.new(1, -12, 0.5, 0);
+
+
+-- ZyphraxHub.Window.DropdownSelection.TopBar.Title
+ZyphraxHub["11"] = Instance.new("TextLabel", ZyphraxHub["7"]);
+ZyphraxHub["11"]["TextWrapped"] = true;
+ZyphraxHub["11"]["Interactable"] = false;
+ZyphraxHub["11"]["ZIndex"] = 0;
+ZyphraxHub["11"]["BorderSizePixel"] = 0;
+ZyphraxHub["11"]["TextSize"] = 18;
+ZyphraxHub["11"]["TextXAlignment"] = Enum.TextXAlignment.Left;
+ZyphraxHub["11"]["TextScaled"] = true;
+ZyphraxHub["11"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+ZyphraxHub["11"]["FontFace"] = Font.new([[rbxassetid://11702779517]], Enum.FontWeight.SemiBold, Enum.FontStyle.Normal);
+ZyphraxHub["11"]["TextColor3"] = Color3.fromRGB(197, 204, 219);
+ZyphraxHub["11"]["BackgroundTransparency"] = 1;
+ZyphraxHub["11"]["AnchorPoint"] = Vector2.new(0, 0.5);
+ZyphraxHub["11"]["Size"] = UDim2.new(0.5, 0, 0, 18);
+ZyphraxHub["11"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["11"]["Text"] = [[Dropdown]];
+ZyphraxHub["11"]["Name"] = [[Title]];
+ZyphraxHub["11"]["Position"] = UDim2.new(0, 12, 0.5, 0);
+
+
+-- ZyphraxHub.Window.DropdownSelection.Dropdowns
+ZyphraxHub["12"] = Instance.new("Folder", ZyphraxHub["4"]);
+ZyphraxHub["12"]["Name"] = [[Dropdowns]];
+
+
+-- ZyphraxHub.Window.TabButtons
+ZyphraxHub["13"] = Instance.new("Frame", ZyphraxHub["2"]);
+ZyphraxHub["13"]["BorderSizePixel"] = 0;
+ZyphraxHub["13"]["BackgroundColor3"] = Color3.fromRGB(37, 40, 47);
+ZyphraxHub["13"]["ClipsDescendants"] = true;
+ZyphraxHub["13"]["Size"] = UDim2.new(0, 165, 1, -35);
+ZyphraxHub["13"]["Position"] = UDim2.new(0, 0, 0, 35);
+ZyphraxHub["13"]["BorderColor3"] = Color3.fromRGB(61, 61, 75);
+ZyphraxHub["13"]["Name"] = [[TabButtons]];
+ZyphraxHub["13"]["SelectionGroup"] = true;
+
+
+-- ZyphraxHub.Window.TabButtons.Lists
+ZyphraxHub["14"] = Instance.new("ScrollingFrame", ZyphraxHub["13"]);
+ZyphraxHub["14"]["Active"] = true;
+ZyphraxHub["14"]["ScrollingDirection"] = Enum.ScrollingDirection.Y;
+ZyphraxHub["14"]["BorderSizePixel"] = 0;
+ZyphraxHub["14"]["CanvasSize"] = UDim2.new(0, 0, 0, 0);
+ZyphraxHub["14"]["ElasticBehavior"] = Enum.ElasticBehavior.Never;
+ZyphraxHub["14"]["TopImage"] = [[rbxasset://textures/ui/Scroll/scroll-middle.png]];
+ZyphraxHub["14"]["BackgroundColor3"] = Color3.fromRGB(37, 40, 47);
+ZyphraxHub["14"]["Name"] = [[Lists]];
+ZyphraxHub["14"]["Selectable"] = false;
+ZyphraxHub["14"]["BottomImage"] = [[rbxasset://textures/ui/Scroll/scroll-middle.png]];
+ZyphraxHub["14"]["AutomaticCanvasSize"] = Enum.AutomaticSize.Y;
+ZyphraxHub["14"]["Size"] = UDim2.new(1, 0, 1, 0);
+ZyphraxHub["14"]["BorderColor3"] = Color3.fromRGB(61, 61, 75);
+ZyphraxHub["14"]["ScrollBarThickness"] = 4;
+ZyphraxHub["14"]["BackgroundTransparency"] = 1;
+
+
+-- ZyphraxHub.Window.TabButtons.Lists.UIListLayout
+ZyphraxHub["15"] = Instance.new("UIListLayout", ZyphraxHub["14"]);
+ZyphraxHub["15"]["SortOrder"] = Enum.SortOrder.LayoutOrder;
+
+
+-- ZyphraxHub.Window.TabButtons.Lists.TabButton
+ZyphraxHub["16"] = Instance.new("Frame", ZyphraxHub["14"]);
+ZyphraxHub["16"]["Visible"] = false;
+ZyphraxHub["16"]["BorderSizePixel"] = 0;
+ZyphraxHub["16"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+ZyphraxHub["16"]["Size"] = UDim2.new(1, 0, 0, 36);
+ZyphraxHub["16"]["Position"] = UDim2.new(-0.0375, 0, 0.38434, 0);
+ZyphraxHub["16"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["16"]["Name"] = [[TabButton]];
+ZyphraxHub["16"]["BackgroundTransparency"] = 1;
+
+
+-- ZyphraxHub.Window.TabButtons.Lists.TabButton.Bar
+ZyphraxHub["17"] = Instance.new("Frame", ZyphraxHub["16"]);
+ZyphraxHub["17"]["BorderSizePixel"] = 0;
+ZyphraxHub["17"]["BackgroundColor3"] = Color3.fromRGB(197, 204, 219);
+ZyphraxHub["17"]["AnchorPoint"] = Vector2.new(0, 0.5);
+ZyphraxHub["17"]["Size"] = UDim2.new(0, 5, 0, 25);
+ZyphraxHub["17"]["Position"] = UDim2.new(0, 8, 0, 18);
+ZyphraxHub["17"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["17"]["Name"] = [[Bar]];
+
+
+-- ZyphraxHub.Window.TabButtons.Lists.TabButton.Bar.UIGradient
+ZyphraxHub["18"] = Instance.new("UIGradient", ZyphraxHub["17"]);
+ZyphraxHub["18"]["Enabled"] = false;
+ZyphraxHub["18"]["Rotation"] = 90;
+ZyphraxHub["18"]["Color"] = ColorSequence.new{ColorSequenceKeypoint.new(0.000, Color3.fromRGB(192, 132, 252)),ColorSequenceKeypoint.new(0.978, Color3.fromRGB(124, 58, 237)),ColorSequenceKeypoint.new(1.000, Color3.fromRGB(192, 132, 252))};
+
+
+-- ZyphraxHub.Window.TabButtons.Lists.TabButton.Bar.UICorner
+ZyphraxHub["19"] = Instance.new("UICorner", ZyphraxHub["17"]);
+ZyphraxHub["19"]["CornerRadius"] = UDim.new(0, 100);
+
+
+-- ZyphraxHub.Window.TabButtons.Lists.TabButton.ImageButton
+ZyphraxHub["1a"] = Instance.new("ImageButton", ZyphraxHub["16"]);
+ZyphraxHub["1a"]["BorderSizePixel"] = 0;
+ZyphraxHub["1a"]["BackgroundTransparency"] = 1;
+-- [ERROR] cannot convert ImageContent, please report to "https://github.com/uniquadev/GuiToLuaConverter/issues"
+ZyphraxHub["1a"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+ZyphraxHub["1a"]["ImageColor3"] = Color3.fromRGB(197, 204, 219);
+ZyphraxHub["1a"]["AnchorPoint"] = Vector2.new(0, 0.5);
+ZyphraxHub["1a"]["Image"] = [[rbxassetid://113216930555884]];
+ZyphraxHub["1a"]["Size"] = UDim2.new(0, 31, 0, 30);
+ZyphraxHub["1a"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["1a"]["Position"] = UDim2.new(0, 21, 0, 18);
+
+
+-- ZyphraxHub.Window.TabButtons.Lists.TabButton.ImageButton.UIAspectRatioConstraint
+ZyphraxHub["1b"] = Instance.new("UIAspectRatioConstraint", ZyphraxHub["1a"]);
+
+
+
+-- ZyphraxHub.Window.TabButtons.Lists.TabButton.TextLabel
+ZyphraxHub["1c"] = Instance.new("TextLabel", ZyphraxHub["16"]);
+ZyphraxHub["1c"]["TextWrapped"] = true;
+ZyphraxHub["1c"]["BorderSizePixel"] = 0;
+ZyphraxHub["1c"]["TextSize"] = 14;
+ZyphraxHub["1c"]["TextXAlignment"] = Enum.TextXAlignment.Left;
+ZyphraxHub["1c"]["TextScaled"] = true;
+ZyphraxHub["1c"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+ZyphraxHub["1c"]["FontFace"] = Font.new([[rbxassetid://11702779517]], Enum.FontWeight.SemiBold, Enum.FontStyle.Normal);
+ZyphraxHub["1c"]["TextColor3"] = Color3.fromRGB(197, 204, 219);
+ZyphraxHub["1c"]["BackgroundTransparency"] = 1;
+ZyphraxHub["1c"]["AnchorPoint"] = Vector2.new(0, 0.5);
+ZyphraxHub["1c"]["Size"] = UDim2.new(0, 88, 0, 16);
+ZyphraxHub["1c"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["1c"]["Text"] = [[ZyphraxHub]];
+ZyphraxHub["1c"]["Position"] = UDim2.new(0, 57, 0.5, 0);
+
+
+-- ZyphraxHub.Window.TabButtons.Lists.UIPadding
+ZyphraxHub["1d"] = Instance.new("UIPadding", ZyphraxHub["14"]);
+ZyphraxHub["1d"]["PaddingTop"] = UDim.new(0, 8);
+
+
+-- ZyphraxHub.Window.TabButtons.Lists.Divider
+ZyphraxHub["1e"] = Instance.new("Frame", ZyphraxHub["14"]);
+ZyphraxHub["1e"]["Visible"] = false;
+ZyphraxHub["1e"]["BorderSizePixel"] = 0;
+ZyphraxHub["1e"]["BackgroundColor3"] = Color3.fromRGB(61, 61, 75);
+ZyphraxHub["1e"]["Size"] = UDim2.new(1, 0, 0, 1);
+ZyphraxHub["1e"]["BorderColor3"] = Color3.fromRGB(61, 61, 75);
+ZyphraxHub["1e"]["Name"] = [[Divider]];
+
+
+-- ZyphraxHub.Window.TabButtons.Lists.TabButton
+ZyphraxHub["1f"] = Instance.new("ImageButton", ZyphraxHub["14"]);
+ZyphraxHub["1f"]["Active"] = false;
+ZyphraxHub["1f"]["BorderSizePixel"] = 0;
+ZyphraxHub["1f"]["AutoButtonColor"] = false;
+ZyphraxHub["1f"]["Visible"] = false;
+ZyphraxHub["1f"]["BackgroundTransparency"] = 1;
+ZyphraxHub["1f"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+ZyphraxHub["1f"]["Selectable"] = false;
+ZyphraxHub["1f"]["Size"] = UDim2.new(1, 0, 0, 36);
+ZyphraxHub["1f"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["1f"]["Name"] = [[TabButton]];
+
+
+-- ZyphraxHub.Window.TabButtons.Lists.TabButton.ImageButton
+ZyphraxHub["20"] = Instance.new("ImageButton", ZyphraxHub["1f"]);
+ZyphraxHub["20"]["BorderSizePixel"] = 0;
+ZyphraxHub["20"]["ImageTransparency"] = 0.5;
+ZyphraxHub["20"]["BackgroundTransparency"] = 1;
+-- [ERROR] cannot convert ImageContent, please report to "https://github.com/uniquadev/GuiToLuaConverter/issues"
+ZyphraxHub["20"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+ZyphraxHub["20"]["ImageColor3"] = Color3.fromRGB(197, 204, 219);
+ZyphraxHub["20"]["AnchorPoint"] = Vector2.new(0, 0.5);
+ZyphraxHub["20"]["Image"] = [[rbxassetid://113216930555884]];
+ZyphraxHub["20"]["Size"] = UDim2.new(0, 31, 0, 30);
+ZyphraxHub["20"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["20"]["Position"] = UDim2.new(0, 6, 0, 18);
+
+
+-- ZyphraxHub.Window.TabButtons.Lists.TabButton.ImageButton.UIAspectRatioConstraint
+ZyphraxHub["21"] = Instance.new("UIAspectRatioConstraint", ZyphraxHub["20"]);
+
+
+
+-- ZyphraxHub.Window.TabButtons.Lists.TabButton.TextLabel
+ZyphraxHub["22"] = Instance.new("TextLabel", ZyphraxHub["1f"]);
+ZyphraxHub["22"]["TextWrapped"] = true;
+ZyphraxHub["22"]["BorderSizePixel"] = 0;
+ZyphraxHub["22"]["TextSize"] = 14;
+ZyphraxHub["22"]["TextXAlignment"] = Enum.TextXAlignment.Left;
+ZyphraxHub["22"]["TextTransparency"] = 0.5;
+ZyphraxHub["22"]["TextScaled"] = true;
+ZyphraxHub["22"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+ZyphraxHub["22"]["FontFace"] = Font.new([[rbxassetid://11702779517]], Enum.FontWeight.Medium, Enum.FontStyle.Normal);
+ZyphraxHub["22"]["TextColor3"] = Color3.fromRGB(197, 204, 219);
+ZyphraxHub["22"]["BackgroundTransparency"] = 1;
+ZyphraxHub["22"]["AnchorPoint"] = Vector2.new(0, 0.5);
+ZyphraxHub["22"]["Size"] = UDim2.new(0, 103, 0, 16);
+ZyphraxHub["22"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["22"]["Text"] = [[ZyphraxHub]];
+ZyphraxHub["22"]["Position"] = UDim2.new(0, 42, 0.5, 0);
+
+
+-- ZyphraxHub.Window.TabButtons.Lists.TabButton.Bar
+ZyphraxHub["23"] = Instance.new("Frame", ZyphraxHub["1f"]);
+ZyphraxHub["23"]["BorderSizePixel"] = 0;
+ZyphraxHub["23"]["BackgroundColor3"] = Color3.fromRGB(197, 204, 219);
+ZyphraxHub["23"]["AnchorPoint"] = Vector2.new(0, 0.5);
+ZyphraxHub["23"]["Size"] = UDim2.new(0, 5, 0, 0);
+ZyphraxHub["23"]["Position"] = UDim2.new(0, 8, 0, 18);
+ZyphraxHub["23"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["23"]["Name"] = [[Bar]];
+ZyphraxHub["23"]["BackgroundTransparency"] = 1;
+
+
+-- ZyphraxHub.Window.TabButtons.Lists.TabButton.Bar.UICorner
+ZyphraxHub["24"] = Instance.new("UICorner", ZyphraxHub["23"]);
+ZyphraxHub["24"]["CornerRadius"] = UDim.new(0, 100);
+
+
+-- ZyphraxHub.Window.TabButtons.UICorner
+ZyphraxHub["25"] = Instance.new("UICorner", ZyphraxHub["13"]);
+ZyphraxHub["25"]["CornerRadius"] = UDim.new(0, 6);
+
+
+-- ZyphraxHub.Window.TabButtons.AntiCornerTop
+ZyphraxHub["26"] = Instance.new("Frame", ZyphraxHub["13"]);
+ZyphraxHub["26"]["BorderSizePixel"] = 0;
+ZyphraxHub["26"]["BackgroundColor3"] = Color3.fromRGB(37, 40, 47);
+ZyphraxHub["26"]["Size"] = UDim2.new(1, 0, 0, 5);
+ZyphraxHub["26"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["26"]["Name"] = [[AntiCornerTop]];
+
+
+-- ZyphraxHub.Window.TabButtons.AntiCornerRight
+ZyphraxHub["27"] = Instance.new("Frame", ZyphraxHub["13"]);
+ZyphraxHub["27"]["BorderSizePixel"] = 0;
+ZyphraxHub["27"]["BackgroundColor3"] = Color3.fromRGB(37, 40, 47);
+ZyphraxHub["27"]["AnchorPoint"] = Vector2.new(0.5, 0);
+ZyphraxHub["27"]["Size"] = UDim2.new(0, 2, 1, 0);
+ZyphraxHub["27"]["Position"] = UDim2.new(1, 1, 0, 0);
+ZyphraxHub["27"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["27"]["Name"] = [[AntiCornerRight]];
+
+
+-- ZyphraxHub.Window.TabButtons.Border
+ZyphraxHub["28"] = Instance.new("Frame", ZyphraxHub["13"]);
+ZyphraxHub["28"]["ZIndex"] = 2;
+ZyphraxHub["28"]["BorderSizePixel"] = 0;
+ZyphraxHub["28"]["BackgroundColor3"] = Color3.fromRGB(61, 61, 75);
+ZyphraxHub["28"]["AnchorPoint"] = Vector2.new(1, 0);
+ZyphraxHub["28"]["Size"] = UDim2.new(0, 2, 1, 0);
+ZyphraxHub["28"]["Position"] = UDim2.new(1, 0, 0, 0);
+ZyphraxHub["28"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["28"]["Name"] = [[Border]];
+
+
+-- ZyphraxHub.Window.TopFrame
+ZyphraxHub["29"] = Instance.new("Frame", ZyphraxHub["2"]);
+ZyphraxHub["29"]["BorderSizePixel"] = 0;
+ZyphraxHub["29"]["BackgroundColor3"] = Color3.fromRGB(37, 40, 47);
+ZyphraxHub["29"]["ClipsDescendants"] = true;
+ZyphraxHub["29"]["Size"] = UDim2.new(1, 0, 0, 35);
+ZyphraxHub["29"]["BorderColor3"] = Color3.fromRGB(61, 61, 75);
+ZyphraxHub["29"]["Name"] = [[TopFrame]];
+
+
+-- ZyphraxHub.Window.TopFrame.Icon
+ZyphraxHub["2a"] = Instance.new("ImageButton", ZyphraxHub["29"]);
+ZyphraxHub["2a"]["Active"] = false;
+ZyphraxHub["2a"]["Interactable"] = false;
+ZyphraxHub["2a"]["BorderSizePixel"] = 0;
+ZyphraxHub["2a"]["BackgroundTransparency"] = 1;
+-- [ERROR] cannot convert ImageContent, please report to "https://github.com/uniquadev/GuiToLuaConverter/issues"
+ZyphraxHub["2a"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+ZyphraxHub["2a"]["AnchorPoint"] = Vector2.new(0, 0.5);
+ZyphraxHub["2a"]["Image"] = [[rbxassetid://113216930555884]];
+ZyphraxHub["2a"]["Size"] = UDim2.new(0, 25, 0, 25);
+ZyphraxHub["2a"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["2a"]["Name"] = [[Icon]];
+ZyphraxHub["2a"]["Position"] = UDim2.new(0, 10, 0.5, 0);
+
+
+-- ZyphraxHub.Window.TopFrame.Icon.UIAspectRatioConstraint
+ZyphraxHub["2b"] = Instance.new("UIAspectRatioConstraint", ZyphraxHub["2a"]);
+
+
+
+-- ZyphraxHub.Window.TopFrame.TextLabel
+ZyphraxHub["2c"] = Instance.new("TextLabel", ZyphraxHub["29"]);
+ZyphraxHub["2c"]["TextWrapped"] = true;
+ZyphraxHub["2c"]["Interactable"] = false;
+ZyphraxHub["2c"]["BorderSizePixel"] = 0;
+ZyphraxHub["2c"]["TextSize"] = 14;
+ZyphraxHub["2c"]["TextScaled"] = true;
+ZyphraxHub["2c"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+ZyphraxHub["2c"]["FontFace"] = Font.new([[rbxassetid://11702779517]], Enum.FontWeight.SemiBold, Enum.FontStyle.Normal);
+ZyphraxHub["2c"]["TextColor3"] = Color3.fromRGB(197, 204, 219);
+ZyphraxHub["2c"]["BackgroundTransparency"] = 1;
+ZyphraxHub["2c"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+ZyphraxHub["2c"]["Size"] = UDim2.new(1, 0, 0, 16);
+ZyphraxHub["2c"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["2c"]["Text"] = [[ZyphraxHub - v1.2.3]];
+ZyphraxHub["2c"]["Position"] = UDim2.new(0.5, 0, 0.5, -1);
+
+
+-- ZyphraxHub.Window.TopFrame.Close
+ZyphraxHub["2d"] = Instance.new("ImageButton", ZyphraxHub["29"]);
+ZyphraxHub["2d"]["BorderSizePixel"] = 0;
+ZyphraxHub["2d"]["BackgroundTransparency"] = 1;
+-- [ERROR] cannot convert ImageContent, please report to "https://github.com/uniquadev/GuiToLuaConverter/issues"
+ZyphraxHub["2d"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+ZyphraxHub["2d"]["ImageColor3"] = Color3.fromRGB(197, 204, 219);
+ZyphraxHub["2d"]["AnchorPoint"] = Vector2.new(1, 0.5);
+ZyphraxHub["2d"]["Image"] = [[rbxassetid://132453323679056]];
+ZyphraxHub["2d"]["Size"] = UDim2.new(0, 20, 0, 20);
+ZyphraxHub["2d"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["2d"]["Name"] = [[Close]];
+ZyphraxHub["2d"]["Position"] = UDim2.new(1, -15, 0.5, 0);
+
+
+-- ZyphraxHub.Window.TopFrame.Maximize
+ZyphraxHub["2e"] = Instance.new("ImageButton", ZyphraxHub["29"]);
+ZyphraxHub["2e"]["BorderSizePixel"] = 0;
+ZyphraxHub["2e"]["BackgroundTransparency"] = 1;
+-- [ERROR] cannot convert ImageContent, please report to "https://github.com/uniquadev/GuiToLuaConverter/issues"
+ZyphraxHub["2e"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+ZyphraxHub["2e"]["ImageColor3"] = Color3.fromRGB(197, 204, 219);
+ZyphraxHub["2e"]["AnchorPoint"] = Vector2.new(1, 0.5);
+ZyphraxHub["2e"]["Image"] = [[rbxassetid://108285848026510]];
+ZyphraxHub["2e"]["Size"] = UDim2.new(0, 15, 0, 15);
+ZyphraxHub["2e"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["2e"]["Name"] = [[Maximize]];
+ZyphraxHub["2e"]["Position"] = UDim2.new(1, -55, 0.5, 0);
+
+
+-- ZyphraxHub.Window.TopFrame.Hide
+ZyphraxHub["2f"] = Instance.new("ImageButton", ZyphraxHub["29"]);
+ZyphraxHub["2f"]["BorderSizePixel"] = 0;
+ZyphraxHub["2f"]["BackgroundTransparency"] = 1;
+-- [ERROR] cannot convert ImageContent, please report to "https://github.com/uniquadev/GuiToLuaConverter/issues"
+ZyphraxHub["2f"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+ZyphraxHub["2f"]["ImageColor3"] = Color3.fromRGB(197, 204, 219);
+ZyphraxHub["2f"]["AnchorPoint"] = Vector2.new(1, 0.5);
+ZyphraxHub["2f"]["Image"] = [[rbxassetid://128209591224511]];
+ZyphraxHub["2f"]["Size"] = UDim2.new(0, 20, 0, 20);
+ZyphraxHub["2f"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["2f"]["Name"] = [[Hide]];
+ZyphraxHub["2f"]["Position"] = UDim2.new(1, -90, 0.5, 0);
+
+
+-- ZyphraxHub.Window.TopFrame.UICorner
+ZyphraxHub["30"] = Instance.new("UICorner", ZyphraxHub["29"]);
+ZyphraxHub["30"]["CornerRadius"] = UDim.new(0, 6);
+
+
+-- ZyphraxHub.Window.TopFrame.Border
+ZyphraxHub["31"] = Instance.new("Frame", ZyphraxHub["29"]);
+ZyphraxHub["31"]["ZIndex"] = 2;
+ZyphraxHub["31"]["BorderSizePixel"] = 0;
+ZyphraxHub["31"]["BackgroundColor3"] = Color3.fromRGB(61, 61, 75);
+ZyphraxHub["31"]["AnchorPoint"] = Vector2.new(0, 0.5);
+ZyphraxHub["31"]["Size"] = UDim2.new(1, 0, 0, 2);
+ZyphraxHub["31"]["Position"] = UDim2.new(0, 0, 1, 0);
+ZyphraxHub["31"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["31"]["Name"] = [[Border]];
+
+
+-- ZyphraxHub.Window.UIStroke
+ZyphraxHub["32"] = Instance.new("UIStroke", ZyphraxHub["2"]);
+ZyphraxHub["32"]["Transparency"] = 0.5;
+ZyphraxHub["32"]["ApplyStrokeMode"] = Enum.ApplyStrokeMode.Border;
+ZyphraxHub["32"]["Color"] = Color3.fromRGB(95, 95, 117);
+
+
+-- ZyphraxHub.Window.Tabs
+ZyphraxHub["33"] = Instance.new("Frame", ZyphraxHub["2"]);
+ZyphraxHub["33"]["BorderSizePixel"] = 0;
+ZyphraxHub["33"]["BackgroundColor3"] = Color3.fromRGB(32, 35, 41);
+ZyphraxHub["33"]["Size"] = UDim2.new(1, -165, 1, -35);
+ZyphraxHub["33"]["Position"] = UDim2.new(0, 165, 0, 35);
+ZyphraxHub["33"]["BorderColor3"] = Color3.fromRGB(61, 61, 75);
+ZyphraxHub["33"]["Name"] = [[Tabs]];
+
+
+-- ZyphraxHub.Window.Tabs.UICorner
+ZyphraxHub["34"] = Instance.new("UICorner", ZyphraxHub["33"]);
+ZyphraxHub["34"]["CornerRadius"] = UDim.new(0, 6);
+
+
+-- ZyphraxHub.Window.Tabs.AntiCornerLeft
+ZyphraxHub["35"] = Instance.new("Frame", ZyphraxHub["33"]);
+ZyphraxHub["35"]["Visible"] = false;
+ZyphraxHub["35"]["BorderSizePixel"] = 0;
+ZyphraxHub["35"]["BackgroundColor3"] = Color3.fromRGB(32, 35, 41);
+ZyphraxHub["35"]["Size"] = UDim2.new(0, 5, 1, 0);
+ZyphraxHub["35"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["35"]["Name"] = [[AntiCornerLeft]];
+
+
+-- ZyphraxHub.Window.Tabs.AntiCornerTop
+ZyphraxHub["36"] = Instance.new("Frame", ZyphraxHub["33"]);
+ZyphraxHub["36"]["BorderSizePixel"] = 0;
+ZyphraxHub["36"]["BackgroundColor3"] = Color3.fromRGB(32, 35, 41);
+ZyphraxHub["36"]["Size"] = UDim2.new(1, 0, 0, 5);
+ZyphraxHub["36"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["36"]["Name"] = [[AntiCornerTop]];
+
+
+-- ZyphraxHub.Window.Tabs.NoObjectFoundText
+ZyphraxHub["37"] = Instance.new("TextLabel", ZyphraxHub["33"]);
+ZyphraxHub["37"]["TextWrapped"] = true;
+ZyphraxHub["37"]["Interactable"] = false;
+ZyphraxHub["37"]["BorderSizePixel"] = 0;
+ZyphraxHub["37"]["TextSize"] = 14;
+ZyphraxHub["37"]["TextScaled"] = true;
+ZyphraxHub["37"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+ZyphraxHub["37"]["FontFace"] = Font.new([[rbxassetid://11702779517]], Enum.FontWeight.SemiBold, Enum.FontStyle.Normal);
+ZyphraxHub["37"]["TextColor3"] = Color3.fromRGB(135, 140, 150);
+ZyphraxHub["37"]["BackgroundTransparency"] = 1;
+ZyphraxHub["37"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+ZyphraxHub["37"]["Size"] = UDim2.new(1, 0, 0, 16);
+ZyphraxHub["37"]["Visible"] = false;
+ZyphraxHub["37"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["37"]["Text"] = [[This tab is empty :(]];
+ZyphraxHub["37"]["Name"] = [[NoObjectFoundText]];
+ZyphraxHub["37"]["Position"] = UDim2.new(0.5, 0, 0.45, 0);
+
+
+-- ZyphraxHub.Window.NotificationFrame
+ZyphraxHub["38"] = Instance.new("Frame", ZyphraxHub["2"]);
+ZyphraxHub["38"]["BorderSizePixel"] = 0;
+ZyphraxHub["38"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+ZyphraxHub["38"]["ClipsDescendants"] = true;
+ZyphraxHub["38"]["Size"] = UDim2.new(1, 0, 1, 0);
+ZyphraxHub["38"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["38"]["Name"] = [[NotificationFrame]];
+ZyphraxHub["38"]["BackgroundTransparency"] = 1;
+
+
+-- ZyphraxHub.Window.NotificationFrame.NotificationList
+ZyphraxHub["39"] = Instance.new("Frame", ZyphraxHub["38"]);
+ZyphraxHub["39"]["ZIndex"] = 5;
+ZyphraxHub["39"]["BorderSizePixel"] = 0;
+ZyphraxHub["39"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+ZyphraxHub["39"]["AnchorPoint"] = Vector2.new(0.5, 0);
+ZyphraxHub["39"]["ClipsDescendants"] = true;
+ZyphraxHub["39"]["Size"] = UDim2.new(0, 630, 1, -35);
+ZyphraxHub["39"]["Position"] = UDim2.new(1, 0, 0, 35);
+ZyphraxHub["39"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["39"]["Name"] = [[NotificationList]];
+ZyphraxHub["39"]["BackgroundTransparency"] = 1;
+
+
+-- ZyphraxHub.Window.NotificationFrame.NotificationList.UIListLayout
+ZyphraxHub["3a"] = Instance.new("UIListLayout", ZyphraxHub["39"]);
+ZyphraxHub["3a"]["Padding"] = UDim.new(0, 12);
+ZyphraxHub["3a"]["SortOrder"] = Enum.SortOrder.LayoutOrder;
+
+
+-- ZyphraxHub.Window.NotificationFrame.NotificationList.UIPadding
+ZyphraxHub["3b"] = Instance.new("UIPadding", ZyphraxHub["39"]);
+ZyphraxHub["3b"]["PaddingTop"] = UDim.new(0, 10);
+ZyphraxHub["3b"]["PaddingRight"] = UDim.new(0, 40);
+ZyphraxHub["3b"]["PaddingLeft"] = UDim.new(0, 40);
+
+
+-- ZyphraxHub.Window.DarkOverlay
+ZyphraxHub["3c"] = Instance.new("Frame", ZyphraxHub["2"]);
+ZyphraxHub["3c"]["Visible"] = false;
+ZyphraxHub["3c"]["BorderSizePixel"] = 0;
+ZyphraxHub["3c"]["BackgroundColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["3c"]["Size"] = UDim2.new(1, 0, 1, 0);
+ZyphraxHub["3c"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["3c"]["Name"] = [[DarkOverlay]];
+ZyphraxHub["3c"]["BackgroundTransparency"] = 0.6;
+
+
+-- ZyphraxHub.Window.DarkOverlay.UICorner
+ZyphraxHub["3d"] = Instance.new("UICorner", ZyphraxHub["3c"]);
+ZyphraxHub["3d"]["CornerRadius"] = UDim.new(0, 10);
+
+
+-- ZyphraxHub.Library
+ZyphraxHub["3e"] = Instance.new("ModuleScript", ZyphraxHub["1"]);
+ZyphraxHub["3e"]["Name"] = [[Library]];
+
+
+-- ZyphraxHub.Library.IconModule
+ZyphraxHub["3f"] = Instance.new("ModuleScript", ZyphraxHub["3e"]);
+ZyphraxHub["3f"]["Name"] = [[IconModule]];
+
+
+-- ZyphraxHub.Library.IconModule.Lucide
+ZyphraxHub["40"] = Instance.new("ModuleScript", ZyphraxHub["3f"]);
+ZyphraxHub["40"]["Name"] = [[Lucide]];
+
+
+-- ZyphraxHub.Templates
+ZyphraxHub["41"] = Instance.new("Folder", ZyphraxHub["1"]);
+ZyphraxHub["41"]["Name"] = [[Templates]];
+
+
+-- ZyphraxHub.Templates.Divider
+ZyphraxHub["42"] = Instance.new("Frame", ZyphraxHub["41"]);
+ZyphraxHub["42"]["Visible"] = false;
+ZyphraxHub["42"]["BorderSizePixel"] = 0;
+ZyphraxHub["42"]["BackgroundColor3"] = Color3.fromRGB(61, 61, 75);
+ZyphraxHub["42"]["Size"] = UDim2.new(1, 0, 0, 1);
+ZyphraxHub["42"]["BorderColor3"] = Color3.fromRGB(61, 61, 75);
+ZyphraxHub["42"]["Name"] = [[Divider]];
+
+
+-- ZyphraxHub.Templates.Tab
+ZyphraxHub["43"] = Instance.new("ScrollingFrame", ZyphraxHub["41"]);
+ZyphraxHub["43"]["Visible"] = false;
+ZyphraxHub["43"]["Active"] = true;
+ZyphraxHub["43"]["ScrollingDirection"] = Enum.ScrollingDirection.Y;
+ZyphraxHub["43"]["BorderSizePixel"] = 0;
+ZyphraxHub["43"]["CanvasSize"] = UDim2.new(0, 0, 0, 0);
+ZyphraxHub["43"]["ElasticBehavior"] = Enum.ElasticBehavior.Never;
+ZyphraxHub["43"]["TopImage"] = [[rbxasset://textures/ui/Scroll/scroll-middle.png]];
+ZyphraxHub["43"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+ZyphraxHub["43"]["Name"] = [[Tab]];
+ZyphraxHub["43"]["Selectable"] = false;
+ZyphraxHub["43"]["BottomImage"] = [[rbxasset://textures/ui/Scroll/scroll-middle.png]];
+ZyphraxHub["43"]["AutomaticCanvasSize"] = Enum.AutomaticSize.Y;
+ZyphraxHub["43"]["Size"] = UDim2.new(1, 0, 1, 0);
+ZyphraxHub["43"]["ScrollBarImageColor3"] = Color3.fromRGB(99, 106, 122);
+ZyphraxHub["43"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["43"]["ScrollBarThickness"] = 5;
+ZyphraxHub["43"]["BackgroundTransparency"] = 1;
+
+
+-- ZyphraxHub.Templates.Tab.UIListLayout
+ZyphraxHub["44"] = Instance.new("UIListLayout", ZyphraxHub["43"]);
+ZyphraxHub["44"]["Padding"] = UDim.new(0, 15);
+ZyphraxHub["44"]["SortOrder"] = Enum.SortOrder.LayoutOrder;
+
+
+-- ZyphraxHub.Templates.Tab.UIPadding
+ZyphraxHub["45"] = Instance.new("UIPadding", ZyphraxHub["43"]);
+ZyphraxHub["45"]["PaddingTop"] = UDim.new(0, 10);
+ZyphraxHub["45"]["PaddingRight"] = UDim.new(0, 14);
+ZyphraxHub["45"]["PaddingLeft"] = UDim.new(0, 10);
+ZyphraxHub["45"]["PaddingBottom"] = UDim.new(0, 10);
+
+
+-- ZyphraxHub.Templates.TabButton
+ZyphraxHub["46"] = Instance.new("ImageButton", ZyphraxHub["41"]);
+ZyphraxHub["46"]["BorderSizePixel"] = 0;
+ZyphraxHub["46"]["AutoButtonColor"] = false;
+ZyphraxHub["46"]["Visible"] = false;
+ZyphraxHub["46"]["BackgroundTransparency"] = 1;
+ZyphraxHub["46"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+ZyphraxHub["46"]["Selectable"] = false;
+ZyphraxHub["46"]["Size"] = UDim2.new(1, 0, 0, 36);
+ZyphraxHub["46"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["46"]["Name"] = [[TabButton]];
+
+
+-- ZyphraxHub.Templates.TabButton.ImageButton
+ZyphraxHub["47"] = Instance.new("ImageButton", ZyphraxHub["46"]);
+ZyphraxHub["47"]["BorderSizePixel"] = 0;
+ZyphraxHub["47"]["ImageTransparency"] = 0.5;
+ZyphraxHub["47"]["BackgroundTransparency"] = 1;
+-- [ERROR] cannot convert ImageContent, please report to "https://github.com/uniquadev/GuiToLuaConverter/issues"
+ZyphraxHub["47"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+ZyphraxHub["47"]["ImageColor3"] = Color3.fromRGB(197, 204, 219);
+ZyphraxHub["47"]["AnchorPoint"] = Vector2.new(0, 0.5);
+ZyphraxHub["47"]["Image"] = [[rbxassetid://114590580697925]];
+ZyphraxHub["47"]["Size"] = UDim2.new(0, 20, 0, 20);
+ZyphraxHub["47"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["47"]["Position"] = UDim2.new(0, 12, 0, 18);
+
+
+-- ZyphraxHub.Templates.TabButton.ImageButton.UIAspectRatioConstraint
+ZyphraxHub["48"] = Instance.new("UIAspectRatioConstraint", ZyphraxHub["47"]);
+
+
+
+-- ZyphraxHub.Templates.TabButton.TextLabel
+ZyphraxHub["49"] = Instance.new("TextLabel", ZyphraxHub["46"]);
+ZyphraxHub["49"]["TextWrapped"] = true;
+ZyphraxHub["49"]["BorderSizePixel"] = 0;
+ZyphraxHub["49"]["TextSize"] = 14;
+ZyphraxHub["49"]["TextXAlignment"] = Enum.TextXAlignment.Left;
+ZyphraxHub["49"]["TextTransparency"] = 0.5;
+ZyphraxHub["49"]["TextScaled"] = true;
+ZyphraxHub["49"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+ZyphraxHub["49"]["FontFace"] = Font.new([[rbxassetid://11702779517]], Enum.FontWeight.Medium, Enum.FontStyle.Normal);
+ZyphraxHub["49"]["TextColor3"] = Color3.fromRGB(197, 204, 219);
+ZyphraxHub["49"]["BackgroundTransparency"] = 1;
+ZyphraxHub["49"]["AnchorPoint"] = Vector2.new(0, 0.5);
+ZyphraxHub["49"]["Size"] = UDim2.new(0, 103, 0, 16);
+ZyphraxHub["49"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["49"]["Text"] = [[]];
+ZyphraxHub["49"]["Position"] = UDim2.new(0, 42, 0.5, 0);
+
+
+-- ZyphraxHub.Templates.TabButton.Bar
+ZyphraxHub["4a"] = Instance.new("Frame", ZyphraxHub["46"]);
+ZyphraxHub["4a"]["BorderSizePixel"] = 0;
+ZyphraxHub["4a"]["BackgroundColor3"] = Color3.fromRGB(197, 204, 219);
+ZyphraxHub["4a"]["AnchorPoint"] = Vector2.new(0, 0.5);
+ZyphraxHub["4a"]["Size"] = UDim2.new(0, 5, 0, 0);
+ZyphraxHub["4a"]["Position"] = UDim2.new(0, 8, 0, 18);
+ZyphraxHub["4a"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["4a"]["Name"] = [[Bar]];
+ZyphraxHub["4a"]["BackgroundTransparency"] = 1;
+
+
+-- ZyphraxHub.Templates.TabButton.Bar.UICorner
+ZyphraxHub["4b"] = Instance.new("UICorner", ZyphraxHub["4a"]);
+ZyphraxHub["4b"]["CornerRadius"] = UDim.new(0, 100);
+
+
+-- ZyphraxHub.Templates.Button
+ZyphraxHub["4c"] = Instance.new("ImageButton", ZyphraxHub["41"]);
+ZyphraxHub["4c"]["BorderSizePixel"] = 0;
+ZyphraxHub["4c"]["AutoButtonColor"] = false;
+ZyphraxHub["4c"]["Visible"] = false;
+ZyphraxHub["4c"]["BackgroundColor3"] = Color3.fromRGB(43, 46, 53);
+ZyphraxHub["4c"]["Selectable"] = false;
+ZyphraxHub["4c"]["AutomaticSize"] = Enum.AutomaticSize.Y;
+ZyphraxHub["4c"]["Size"] = UDim2.new(1, 0, 0, 35);
+ZyphraxHub["4c"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["4c"]["Name"] = [[Button]];
+ZyphraxHub["4c"]["Position"] = UDim2.new(0, 0, 0.384, 0);
+
+
+-- ZyphraxHub.Templates.Button.UICorner
+ZyphraxHub["4d"] = Instance.new("UICorner", ZyphraxHub["4c"]);
+ZyphraxHub["4d"]["CornerRadius"] = UDim.new(0, 6);
+
+
+-- ZyphraxHub.Templates.Button.Frame
+ZyphraxHub["4e"] = Instance.new("Frame", ZyphraxHub["4c"]);
+ZyphraxHub["4e"]["BorderSizePixel"] = 0;
+ZyphraxHub["4e"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+ZyphraxHub["4e"]["AutomaticSize"] = Enum.AutomaticSize.Y;
+ZyphraxHub["4e"]["Size"] = UDim2.new(1, 0, 0, 35);
+ZyphraxHub["4e"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["4e"]["BackgroundTransparency"] = 1;
+
+
+-- ZyphraxHub.Templates.Button.Frame.UIListLayout
+ZyphraxHub["4f"] = Instance.new("UIListLayout", ZyphraxHub["4e"]);
+ZyphraxHub["4f"]["Padding"] = UDim.new(0, 5);
+ZyphraxHub["4f"]["SortOrder"] = Enum.SortOrder.LayoutOrder;
+
+
+-- ZyphraxHub.Templates.Button.Frame.UIPadding
+ZyphraxHub["50"] = Instance.new("UIPadding", ZyphraxHub["4e"]);
+ZyphraxHub["50"]["PaddingTop"] = UDim.new(0, 10);
+ZyphraxHub["50"]["PaddingRight"] = UDim.new(0, 10);
+ZyphraxHub["50"]["PaddingLeft"] = UDim.new(0, 10);
+ZyphraxHub["50"]["PaddingBottom"] = UDim.new(0, 10);
+
+
+-- ZyphraxHub.Templates.Button.Frame.Title
+ZyphraxHub["51"] = Instance.new("TextLabel", ZyphraxHub["4e"]);
+ZyphraxHub["51"]["TextWrapped"] = true;
+ZyphraxHub["51"]["Interactable"] = false;
+ZyphraxHub["51"]["BorderSizePixel"] = 0;
+ZyphraxHub["51"]["TextSize"] = 16;
+ZyphraxHub["51"]["TextXAlignment"] = Enum.TextXAlignment.Left;
+ZyphraxHub["51"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+ZyphraxHub["51"]["FontFace"] = Font.new([[rbxassetid://11702779517]], Enum.FontWeight.SemiBold, Enum.FontStyle.Normal);
+ZyphraxHub["51"]["TextColor3"] = Color3.fromRGB(197, 204, 219);
+ZyphraxHub["51"]["BackgroundTransparency"] = 1;
+ZyphraxHub["51"]["Size"] = UDim2.new(1, 0, 0, 15);
+ZyphraxHub["51"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["51"]["Text"] = [[Button]];
+ZyphraxHub["51"]["Name"] = [[Title]];
+
+
+-- ZyphraxHub.Templates.Button.Frame.Title.ClickIcon
+ZyphraxHub["52"] = Instance.new("ImageButton", ZyphraxHub["51"]);
+ZyphraxHub["52"]["BorderSizePixel"] = 0;
+ZyphraxHub["52"]["AutoButtonColor"] = false;
+ZyphraxHub["52"]["BackgroundTransparency"] = 1;
+-- [ERROR] cannot convert ImageContent, please report to "https://github.com/uniquadev/GuiToLuaConverter/issues"
+ZyphraxHub["52"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+ZyphraxHub["52"]["ImageColor3"] = Color3.fromRGB(197, 204, 219);
+ZyphraxHub["52"]["AnchorPoint"] = Vector2.new(1, 0.5);
+ZyphraxHub["52"]["Image"] = [[rbxassetid://91877599529856]];
+ZyphraxHub["52"]["Size"] = UDim2.new(0, 23, 0, 23);
+ZyphraxHub["52"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["52"]["Name"] = [[ClickIcon]];
+ZyphraxHub["52"]["Position"] = UDim2.new(1, 0, 0.5, 0);
+
+
+-- ZyphraxHub.Templates.Button.Frame.Description
+ZyphraxHub["53"] = Instance.new("TextLabel", ZyphraxHub["4e"]);
+ZyphraxHub["53"]["TextWrapped"] = true;
+ZyphraxHub["53"]["Interactable"] = false;
+ZyphraxHub["53"]["BorderSizePixel"] = 0;
+ZyphraxHub["53"]["TextSize"] = 16;
+ZyphraxHub["53"]["TextXAlignment"] = Enum.TextXAlignment.Left;
+ZyphraxHub["53"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+ZyphraxHub["53"]["FontFace"] = Font.new([[rbxassetid://11702779517]], Enum.FontWeight.Medium, Enum.FontStyle.Normal);
+ZyphraxHub["53"]["TextColor3"] = Color3.fromRGB(197, 204, 219);
+ZyphraxHub["53"]["BackgroundTransparency"] = 1;
+ZyphraxHub["53"]["Size"] = UDim2.new(1, 0, 0, 15);
+ZyphraxHub["53"]["Visible"] = false;
+ZyphraxHub["53"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["53"]["Text"] = [[Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat lacus in enim congue, fermentum euismod leo ultricies. Nulla sodales. ]];
+ZyphraxHub["53"]["LayoutOrder"] = 1;
+ZyphraxHub["53"]["AutomaticSize"] = Enum.AutomaticSize.Y;
+ZyphraxHub["53"]["Name"] = [[Description]];
+
+
+-- ZyphraxHub.Templates.Button.Frame.UIGradient
+ZyphraxHub["54"] = Instance.new("UIGradient", ZyphraxHub["4e"]);
+ZyphraxHub["54"]["Color"] = ColorSequence.new{ColorSequenceKeypoint.new(0.000, Color3.fromRGB(124, 58, 237)),ColorSequenceKeypoint.new(0.160, Color3.fromRGB(124, 58, 237)),ColorSequenceKeypoint.new(0.320, Color3.fromRGB(124, 58, 237)),ColorSequenceKeypoint.new(0.540, Color3.fromRGB(124, 58, 237)),ColorSequenceKeypoint.new(0.782, Color3.fromRGB(124, 58, 237)),ColorSequenceKeypoint.new(1.000, Color3.fromRGB(124, 58, 237))};
+
+
+-- ZyphraxHub.Templates.Button.Frame.UIGradient
+ZyphraxHub["55"] = Instance.new("UIGradient", ZyphraxHub["4e"]);
+ZyphraxHub["55"]["Enabled"] = false;
+ZyphraxHub["55"]["Color"] = ColorSequence.new{ColorSequenceKeypoint.new(0.000, Color3.fromRGB(124, 58, 237)),ColorSequenceKeypoint.new(0.160, Color3.fromRGB(192, 132, 252)),ColorSequenceKeypoint.new(0.320, Color3.fromRGB(124, 58, 237)),ColorSequenceKeypoint.new(0.540, Color3.fromRGB(124, 58, 237)),ColorSequenceKeypoint.new(0.782, Color3.fromRGB(192, 132, 252)),ColorSequenceKeypoint.new(1.000, Color3.fromRGB(124, 58, 237))};
+
+
+-- ZyphraxHub.Templates.Button.Frame.UIGradient
+ZyphraxHub["56"] = Instance.new("UIGradient", ZyphraxHub["4e"]);
+ZyphraxHub["56"]["Enabled"] = false;
+ZyphraxHub["56"]["Color"] = ColorSequence.new{ColorSequenceKeypoint.new(0.000, Color3.fromRGB(124, 58, 237)),ColorSequenceKeypoint.new(0.160, Color3.fromRGB(124, 58, 237)),ColorSequenceKeypoint.new(0.320, Color3.fromRGB(124, 58, 237)),ColorSequenceKeypoint.new(0.540, Color3.fromRGB(192, 132, 252)),ColorSequenceKeypoint.new(0.782, Color3.fromRGB(124, 58, 237)),ColorSequenceKeypoint.new(1.000, Color3.fromRGB(124, 58, 237))};
+
+
+-- ZyphraxHub.Templates.Button.Frame.UICorner
+ZyphraxHub["57"] = Instance.new("UICorner", ZyphraxHub["4e"]);
+ZyphraxHub["57"]["CornerRadius"] = UDim.new(0, 6);
+
+
+-- ZyphraxHub.Templates.Button.UIStroke
+ZyphraxHub["58"] = Instance.new("UIStroke", ZyphraxHub["4c"]);
+ZyphraxHub["58"]["ApplyStrokeMode"] = Enum.ApplyStrokeMode.Border;
+ZyphraxHub["58"]["Thickness"] = 1.5;
+ZyphraxHub["58"]["Color"] = Color3.fromRGB(61, 61, 75);
+
+
+-- ZyphraxHub.Templates.Paragraph
+ZyphraxHub["59"] = Instance.new("Frame", ZyphraxHub["41"]);
+ZyphraxHub["59"]["Visible"] = false;
+ZyphraxHub["59"]["BorderSizePixel"] = 0;
+ZyphraxHub["59"]["BackgroundColor3"] = Color3.fromRGB(43, 46, 53);
+ZyphraxHub["59"]["AutomaticSize"] = Enum.AutomaticSize.Y;
+ZyphraxHub["59"]["Size"] = UDim2.new(1, 0, 0, 35);
+ZyphraxHub["59"]["Position"] = UDim2.new(-0.0375, 0, 0.38434, 0);
+ZyphraxHub["59"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["59"]["Name"] = [[Paragraph]];
+
+
+-- ZyphraxHub.Templates.Paragraph.UICorner
+ZyphraxHub["5a"] = Instance.new("UICorner", ZyphraxHub["59"]);
+ZyphraxHub["5a"]["CornerRadius"] = UDim.new(0, 6);
+
+
+-- ZyphraxHub.Templates.Paragraph.UIStroke
+ZyphraxHub["5b"] = Instance.new("UIStroke", ZyphraxHub["59"]);
+ZyphraxHub["5b"]["ApplyStrokeMode"] = Enum.ApplyStrokeMode.Border;
+ZyphraxHub["5b"]["Thickness"] = 1.5;
+ZyphraxHub["5b"]["Color"] = Color3.fromRGB(61, 61, 75);
+
+
+-- ZyphraxHub.Templates.Paragraph.Title
+ZyphraxHub["5c"] = Instance.new("TextLabel", ZyphraxHub["59"]);
+ZyphraxHub["5c"]["TextWrapped"] = true;
+ZyphraxHub["5c"]["Interactable"] = false;
+ZyphraxHub["5c"]["BorderSizePixel"] = 0;
+ZyphraxHub["5c"]["TextSize"] = 16;
+ZyphraxHub["5c"]["TextXAlignment"] = Enum.TextXAlignment.Left;
+ZyphraxHub["5c"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+ZyphraxHub["5c"]["FontFace"] = Font.new([[rbxassetid://11702779517]], Enum.FontWeight.Bold, Enum.FontStyle.Normal);
+ZyphraxHub["5c"]["TextColor3"] = Color3.fromRGB(197, 204, 219);
+ZyphraxHub["5c"]["BackgroundTransparency"] = 1;
+ZyphraxHub["5c"]["Size"] = UDim2.new(1, 0, 0, 15);
+ZyphraxHub["5c"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["5c"]["Text"] = [[Title]];
+ZyphraxHub["5c"]["AutomaticSize"] = Enum.AutomaticSize.Y;
+ZyphraxHub["5c"]["Name"] = [[Title]];
+
+
+-- ZyphraxHub.Templates.Paragraph.UIPadding
+ZyphraxHub["5d"] = Instance.new("UIPadding", ZyphraxHub["59"]);
+ZyphraxHub["5d"]["PaddingTop"] = UDim.new(0, 10);
+ZyphraxHub["5d"]["PaddingRight"] = UDim.new(0, 10);
+ZyphraxHub["5d"]["PaddingLeft"] = UDim.new(0, 10);
+ZyphraxHub["5d"]["PaddingBottom"] = UDim.new(0, 10);
+
+
+-- ZyphraxHub.Templates.Paragraph.UIListLayout
+ZyphraxHub["5e"] = Instance.new("UIListLayout", ZyphraxHub["59"]);
+ZyphraxHub["5e"]["Padding"] = UDim.new(0, 5);
+ZyphraxHub["5e"]["SortOrder"] = Enum.SortOrder.LayoutOrder;
+
+
+-- ZyphraxHub.Templates.Paragraph.Description
+ZyphraxHub["5f"] = Instance.new("TextLabel", ZyphraxHub["59"]);
+ZyphraxHub["5f"]["TextWrapped"] = true;
+ZyphraxHub["5f"]["Interactable"] = false;
+ZyphraxHub["5f"]["BorderSizePixel"] = 0;
+ZyphraxHub["5f"]["TextSize"] = 16;
+ZyphraxHub["5f"]["TextXAlignment"] = Enum.TextXAlignment.Left;
+ZyphraxHub["5f"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+ZyphraxHub["5f"]["FontFace"] = Font.new([[rbxassetid://11702779517]], Enum.FontWeight.Medium, Enum.FontStyle.Normal);
+ZyphraxHub["5f"]["TextColor3"] = Color3.fromRGB(197, 204, 219);
+ZyphraxHub["5f"]["BackgroundTransparency"] = 1;
+ZyphraxHub["5f"]["Size"] = UDim2.new(1, 0, 0, 15);
+ZyphraxHub["5f"]["Visible"] = false;
+ZyphraxHub["5f"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["5f"]["Text"] = [[Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat lacus in enim congue, fermentum euismod leo ultricies. Nulla sodales. ]];
+ZyphraxHub["5f"]["LayoutOrder"] = 1;
+ZyphraxHub["5f"]["AutomaticSize"] = Enum.AutomaticSize.Y;
+ZyphraxHub["5f"]["Name"] = [[Description]];
+
+
+-- ZyphraxHub.Templates.Toggle
+ZyphraxHub["60"] = Instance.new("ImageButton", ZyphraxHub["41"]);
+ZyphraxHub["60"]["BorderSizePixel"] = 0;
+ZyphraxHub["60"]["AutoButtonColor"] = false;
+ZyphraxHub["60"]["Visible"] = false;
+ZyphraxHub["60"]["BackgroundColor3"] = Color3.fromRGB(43, 46, 53);
+ZyphraxHub["60"]["Selectable"] = false;
+ZyphraxHub["60"]["AutomaticSize"] = Enum.AutomaticSize.Y;
+ZyphraxHub["60"]["Size"] = UDim2.new(1, 0, 0, 35);
+ZyphraxHub["60"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["60"]["Name"] = [[Toggle]];
+ZyphraxHub["60"]["Position"] = UDim2.new(-0.0375, 0, 0.38434, 0);
+
+
+-- ZyphraxHub.Templates.Toggle.UICorner
+ZyphraxHub["61"] = Instance.new("UICorner", ZyphraxHub["60"]);
+ZyphraxHub["61"]["CornerRadius"] = UDim.new(0, 6);
+
+
+-- ZyphraxHub.Templates.Toggle.UIStroke
+ZyphraxHub["62"] = Instance.new("UIStroke", ZyphraxHub["60"]);
+ZyphraxHub["62"]["ApplyStrokeMode"] = Enum.ApplyStrokeMode.Border;
+ZyphraxHub["62"]["Thickness"] = 1.5;
+ZyphraxHub["62"]["Color"] = Color3.fromRGB(61, 61, 75);
+
+
+-- ZyphraxHub.Templates.Toggle.UIPadding
+ZyphraxHub["63"] = Instance.new("UIPadding", ZyphraxHub["60"]);
+ZyphraxHub["63"]["PaddingTop"] = UDim.new(0, 10);
+ZyphraxHub["63"]["PaddingRight"] = UDim.new(0, 10);
+ZyphraxHub["63"]["PaddingLeft"] = UDim.new(0, 10);
+ZyphraxHub["63"]["PaddingBottom"] = UDim.new(0, 10);
+
+
+-- ZyphraxHub.Templates.Toggle.UIListLayout
+ZyphraxHub["64"] = Instance.new("UIListLayout", ZyphraxHub["60"]);
+ZyphraxHub["64"]["Padding"] = UDim.new(0, 5);
+ZyphraxHub["64"]["SortOrder"] = Enum.SortOrder.LayoutOrder;
+
+
+-- ZyphraxHub.Templates.Toggle.Description
+ZyphraxHub["65"] = Instance.new("TextLabel", ZyphraxHub["60"]);
+ZyphraxHub["65"]["TextWrapped"] = true;
+ZyphraxHub["65"]["Interactable"] = false;
+ZyphraxHub["65"]["BorderSizePixel"] = 0;
+ZyphraxHub["65"]["TextSize"] = 16;
+ZyphraxHub["65"]["TextXAlignment"] = Enum.TextXAlignment.Left;
+ZyphraxHub["65"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+ZyphraxHub["65"]["FontFace"] = Font.new([[rbxassetid://11702779517]], Enum.FontWeight.Medium, Enum.FontStyle.Normal);
+ZyphraxHub["65"]["TextColor3"] = Color3.fromRGB(197, 204, 219);
+ZyphraxHub["65"]["BackgroundTransparency"] = 1;
+ZyphraxHub["65"]["Size"] = UDim2.new(1, 0, 0, 15);
+ZyphraxHub["65"]["Visible"] = false;
+ZyphraxHub["65"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["65"]["Text"] = [[Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat lacus in enim congue, fermentum euismod leo ultricies. Nulla sodales. ]];
+ZyphraxHub["65"]["LayoutOrder"] = 1;
+ZyphraxHub["65"]["AutomaticSize"] = Enum.AutomaticSize.Y;
+ZyphraxHub["65"]["Name"] = [[Description]];
+
+
+-- ZyphraxHub.Templates.Toggle.Title
+-- ZyphraxHub.Templates.Toggle.Title
+ZyphraxHub["66"] = Instance.new("TextLabel", ZyphraxHub["60"]);
+ZyphraxHub["66"]["TextWrapped"] = true;
+ZyphraxHub["66"]["BorderSizePixel"] = 0;
+ZyphraxHub["66"]["TextSize"] = 16;
+ZyphraxHub["66"]["TextXAlignment"] = Enum.TextXAlignment.Left;
+ZyphraxHub["66"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+ZyphraxHub["66"]["FontFace"] = Font.new([[rbxassetid://11702779517]], Enum.FontWeight.SemiBold, Enum.FontStyle.Normal);
+ZyphraxHub["66"]["TextColor3"] = Color3.fromRGB(197, 204, 219);
+ZyphraxHub["66"]["BackgroundTransparency"] = 1;
+ZyphraxHub["66"]["Size"] = UDim2.new(1, 0, 0, 15);
+ZyphraxHub["66"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["66"]["Text"] = [[Toggle]];
+ZyphraxHub["66"]["Name"] = [[Title]];
+
+
+-- ZyphraxHub.Templates.Toggle.Title.Fill
+ZyphraxHub["67"] = Instance.new("ImageButton", ZyphraxHub["66"]);
+ZyphraxHub["67"]["BorderSizePixel"] = 0;
+ZyphraxHub["67"]["AutoButtonColor"] = false;
+ZyphraxHub["67"]["BackgroundColor3"] = Color3.fromRGB(54, 57, 63);
+ZyphraxHub["67"]["ImageColor3"] = Color3.fromRGB(197, 204, 219);
+ZyphraxHub["67"]["AnchorPoint"] = Vector2.new(1, 0.5);
+ZyphraxHub["67"]["Size"] = UDim2.new(0, 45, 0, 25);
+ZyphraxHub["67"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+ZyphraxHub["67"]["Name"] = [[Fill]];
+ZyphraxHub["67"]["Position"] = UDim2.new(1, 0, 0.5, 0);
+
+
+-- ZyphraxHub.Templates.Toggle.Title.Fill.UICorner
+ZyphraxHub["68"] = Instance.new("UICorner", ZyphraxHub["67"]);
+ZyphraxHub["68"]["CornerRadius"] = UDim.new(100, 0);
+
+
+-- ZyphraxHub.Templates.Toggle.Title.Fill.Ball
+ZyphraxHub["69"] = Instance.new("ImageButton", ZyphraxHub["67"]);
+ZyphraxHub["69"]["Active"] = false;
+ZyphraxHub["69"]["Interactable"] = false;
+ZyphraxHub["69"]["BorderSizePixel"] = 0;
+ZyphraxHub["69"]["AutoButtonColor"] = false;
+ZyphraxHub["69"]["BackgroundColor3"] = Color3.from
