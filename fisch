@@ -1,0 +1,1541 @@
+local Collection = {}; Collection.__index = Collection
+local CollectionService = game:GetService("CollectionService")
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+local HttpService = game:GetService("HttpService")
+
+local Workspace = game:GetService("Workspace")
+local GuiService = game:GetService("GuiService")
+local Lighting = game:GetService("Lighting")
+
+local TweenService = game:GetService("TweenService")
+local TeleportService = game:GetService("TeleportService")
+
+local VirtualInputManager = game:GetService("VirtualInputManager")
+local VirtualUser = game:GetService("VirtualUser")
+
+local UserInputService = game:GetService("UserInputService")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+
+local Backpack = LocalPlayer:WaitForChild("Backpack")
+local Net = require(ReplicatedStorage.packages.Net)
+local CastRemote = Net:RemoteFunction("FishingRod/Cast", -1)
+
+local Camera = Workspace.CurrentCamera
+
+getgenv().Settings = {
+    Setup = {
+        ["Save Settings"] = true,
+        ["Protect User"] = false,
+        ["Walk On Water"] = false,
+        ["Disable Animation"] = false,
+        ["Disable Clip"] = false,
+        ["Enable Fly"] = false,
+        ["Enable Equip Rod"] = false,
+        ["Choose Cast Method"] = "Remote",
+        ["Choose Cast Mode"] = "Perfect",
+        ["Choose Shake Method"] = "Slow",
+        ["Choose Reel Method"] = "Slow",
+        ["Choose Bobber Method"] = "v1"
+    },
+    Fisching = {
+        ["Enable Instant Bobber"] = false,
+        ["Enable Equip Rod"]= false,
+        ["Enable Shake Ui"] = false,
+        ["Enable Cast Rod"] = false,
+        ["Enable Reel Minigame"] = false,
+        ["Enable Perfect Catch"] = false,
+        ["Enable Sell Inventory"] = false,
+        ["Sell Delay"] = 5,
+    },
+}
+
+
+function Collection:Load()
+    print("Loaded!")
+	if readfile and writefile and isfile and isfolder then
+		if not isfolder("Zyphrax Hub") then
+			makefolder("Zyphrax Hub")
+		end
+		if not isfolder("Zyphrax Hub/Fisch/Settings/") then
+			makefolder("Zyphrax Hub/Fisch/Settings/")
+		end
+		if not isfile("Zyphrax Hub/Fisch/Settings/User-" .. game.Players.LocalPlayer.Name .. ".json") then
+			writefile("Zyphrax Hub/Fisch/Settings/User-" .. game.Players.LocalPlayer.Name .. ".json", game:GetService("HttpService"):JSONEncode(getgenv().Settings))
+		else
+			local Decode = game:GetService("HttpService"):JSONDecode(readfile("Zyphrax Hub/Fisch/Settings/User-" .. game.Players.LocalPlayer.Name .. ".json"))
+			for i,v in pairs(Decode) do
+				getgenv().Settings[i] = v
+			end
+		end
+	else
+		return warn("Status : Undetected Executor")
+	end
+end
+
+function Collection:SaveSetting()
+    print("Save!")
+	if readfile and writefile and isfile and isfolder then
+		if not isfile("Zyphrax Hub/Fisch/Settings/User-" .. game.Players.LocalPlayer.Name .. ".json") then
+			Collection:Load()
+		else
+			local Decode = game:GetService("HttpService"):JSONDecode(readfile("Zyphrax Hub/Fisch/Settings/User-" .. game.Players.LocalPlayer.Name .. ".json"))
+			local Array = {}
+			for i,v in pairs(getgenv().Settings) do
+				Array[i] = v
+			end
+			writefile("Zyphrax Hub/Fisch/Settings/User-" .. game.Players.LocalPlayer.Name .. ".json", game:GetService("HttpService"):JSONEncode(Array))
+		end
+	else
+		return warn("Status : Undetected Executor")
+	end
+end
+
+Collection:Load()
+
+local version = LRM_ScriptVersion and "v" .. table.concat(LRM_ScriptVersion:split(""), ".") or "Engenesis Mode"
+local Zyphrax_Url = game:HttpGet("https://raw.githubusercontent.com/Moonshall/Ui-ZypraxHub/refs/heads/main/Ui")
+local ZyphraxUi = loadstring(Zyphrax_Url)()
+local IsOnMobile = table.find({Enum.Platform.Android, Enum.Platform.IOS}, game:GetService("UserInputService"):GetPlatform())
+local WindowSize = IsOnMobile and UDim2.fromOffset(528, 334) or UDim2.fromOffset(580, 350)
+
+local Window = ZyphraxUi:CreateWindow({
+    Title = "Zyphrax Hub",
+    Icon = "rbxassetid://118666171323345",
+    Author = (premium and "Premium" or "Fisch") .. " | " .. version,
+    Folder = "Zyphrax Hub",
+    Size = WindowSize,
+    LiveSearchDropdown = true,
+    FileSaveName = "Zyphrax Hub/Fisch.json",
+})
+
+local ReelController = require(
+    ReplicatedStorage.client.legacyControllers.ReelController
+)
+
+local NotificationDelay = 6
+local stack = {}
+
+local gui = Instance.new("ScreenGui")
+gui.Parent = game.CoreGui
+gui.ResetOnSpawn = false
+
+local holder = Instance.new("Frame")
+holder.BackgroundTransparency = 1
+holder.Size = UDim2.new(0,260,1,0)
+holder.Position = UDim2.new(0,10,0,0)
+holder.Parent = gui
+
+
+local function createNotif(name,mutation,weight)
+
+    local frame = Instance.new("Frame")
+    frame.Size = UDim2.new(0,240,0,80)
+    frame.Position = UDim2.new(0,-260,0.5,-40)
+    frame.BackgroundColor3 = Color3.fromRGB(22,22,28)
+    frame.BorderSizePixel = 0
+    frame.Parent = holder
+    frame.ZIndex = #stack + 1
+    Instance.new("UICorner",frame).CornerRadius = UDim.new(0,12)
+
+    local border = Instance.new("Frame")
+    border.Size = UDim2.new(1,4,1,4)
+    border.Position = UDim2.new(0,-2,0,-2)
+    border.BackgroundTransparency = 1
+    border.ZIndex = frame.ZIndex - 1
+    border.Parent = frame
+
+    local stroke = Instance.new("UIStroke")
+    stroke.Thickness = 2
+    stroke.Color = Color3.fromRGB(0,255,255)
+    stroke.Parent = frame
+
+    local gradient = Instance.new("UIGradient")
+    gradient.Color = ColorSequence.new{
+        ColorSequenceKeypoint.new(0,Color3.fromRGB(0,0,0)),
+        ColorSequenceKeypoint.new(0.5,Color3.fromRGB(255,255,255)),
+        ColorSequenceKeypoint.new(1,Color3.fromRGB(115, 0, 255))
+    }
+    gradient.Parent = frame
+
+    task.spawn(function()
+        while frame.Parent do
+            gradient.Rotation += 2
+            task.wait()
+        end
+    end)
+
+    local function dot(x,c)
+        local d = Instance.new("Frame")
+        d.Size = UDim2.new(0,8,0,8)
+        d.Position = UDim2.new(0,x,0,8)
+        d.BackgroundColor3 = c
+        d.BorderSizePixel = 0
+        d.ZIndex = frame.ZIndex + 1
+        d.Parent = frame
+        Instance.new("UICorner",d).CornerRadius = UDim.new(1,0)
+    end
+
+    dot(10,Color3.fromRGB(255,95,86))
+    dot(24,Color3.fromRGB(255,189,46))
+    dot(38,Color3.fromRGB(39,201,63))
+
+    local fishLabel = Instance.new("TextLabel")
+    fishLabel.BackgroundTransparency = 1
+    fishLabel.Position = UDim2.new(0,10,0,22)
+    fishLabel.Size = UDim2.new(1,-20,0,20)
+    fishLabel.Font = Enum.Font.GothamBold
+    fishLabel.TextSize = 15
+    fishLabel.TextColor3 = Color3.new(1,1,1)
+    fishLabel.TextXAlignment = Enum.TextXAlignment.Left
+    fishLabel.Text = "🐟 "..name
+    fishLabel.ZIndex = frame.ZIndex + 1
+    fishLabel.Parent = frame
+
+    local mutationLabel = fishLabel:Clone()
+    mutationLabel.Position = UDim2.new(0,10,0,42)
+    mutationLabel.Font = Enum.Font.Gotham
+    mutationLabel.TextSize = 12
+    mutationLabel.TextColor3 = Color3.fromRGB(180,180,180)
+    mutationLabel.Text = "Mutation: "..mutation
+    mutationLabel.Parent = frame
+
+    local weightLabel = mutationLabel:Clone()
+    weightLabel.Position = UDim2.new(0,10,0,58)
+    weightLabel.TextColor3 = Color3.fromRGB(200,200,200)
+    weightLabel.Text = "Weight: "..weight
+    weightLabel.Parent = frame
+
+    table.insert(stack, frame)
+
+    TweenService:Create(frame,TweenInfo.new(0.25),
+        {Position = UDim2.new(0,20,0.5,-40)}
+    ):Play()
+
+    task.delay(NotificationDelay,function()
+        TweenService:Create(frame,TweenInfo.new(0.25),
+            {Position = UDim2.new(0,-260,0.5,-40)}
+        ):Play()
+        task.wait(0.3)
+        frame:Destroy()
+    end)
+end
+
+
+local LastReel = nil
+
+task.spawn(function()
+    while true do
+        task.wait()
+
+        local reel = ReelController.ActiveReel
+        if reel and reel ~= LastReel then
+            LastReel = reel
+
+            if not reel.fish then
+                reel.OnLoad:Wait()
+            end
+
+            local fish     = reel.fish
+            local name     = fish.Name or "Unknown"
+            local kg       = fish.Weight or fish.Kg or fish.weight or "?"
+            local mutation = fish.Mutation or fish.mutation or fish.variant or "None"
+
+            local kgDisplay = type(kg) == "number"
+                and string.format("%.2f kg", kg)
+                or tostring(kg) .. " kg"
+
+            createNotif(name, tostring(mutation), kgDisplay)
+        end
+    end
+end)
+
+local fishCaught = 0
+local scriptStartTime = tick()
+
+local Remotes = ReplicatedStorage.events
+local fishingAnimation = ReplicatedStorage.resources.animations.fishing
+
+local _v = {}
+
+local zoneTeleportList = {}
+for _, v in pairs(workspace.zones.player:GetChildren()) do
+    if table.find(zoneTeleportList, v.Name) then continue end
+    table.insert(zoneTeleportList, v.Name)
+end
+table.sort(zoneTeleportList)
+
+local rodList = {}
+for _, v in pairs(ReplicatedStorage.shared.modules.RodSkins:GetChildren()) do
+    table.insert(rodList, v.Name)
+end
+table.sort(rodList)
+
+local itemList = {}
+for _, v in pairs(workspace.Items:GetChildren()) do
+    table.insert(itemList, v.Name)
+end
+table.sort(itemList)
+
+--[[ 5. Functions & Utility ]]
+
+function Collection:tpPlayer(targetPos)
+	local LocalPlayer = Players.LocalPlayer
+	local character = LocalPlayer.Character
+	local hrp = character:FindFirstChild("HumanoidRootPart")
+	if hrp then
+		hrp.CFrame = targetPos
+	end
+end
+
+function Collection:getPlayerPos()
+    local LocalPlayer = Players.LocalPlayer
+    local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+    local root = char:FindFirstChild("HumanoidRootPart")
+    return root and root.Position or Vector3.zero
+end
+
+function Collection:FireProximity(proximity)
+	if proximity:IsA("ProximityPrompt") and proximity.Enabled then
+		proximity:InputHoldBegin()
+        proximity.HoldDuration = 0
+        proximity:InputHoldEnd()
+	end
+end
+
+function gradient(text)
+	local startColor, endColor = Color3.fromHex("#009EFF"), Color3.fromHex("#0005FF")
+    local result = ""
+    local length = #text
+    for i = 1, length do
+        local t = (i - 1) / math.max(length - 1, 1)
+        local r = math.floor((startColor.R + (endColor.R - startColor.R) * t) * 255)
+        local g = math.floor((startColor.G + (endColor.G - startColor.G) * t) * 255)
+        local b = math.floor((startColor.B + (endColor.B - startColor.B) * t) * 255)
+        local char = text:sub(i, i)
+        result = result .. "<font color=\"rgb(" .. r ..", " .. g .. ", " .. b .. ")\">" .. char .. "</font>"
+    end
+    return "<b>"..result.."</b>"
+end
+
+function Collection:ShakeUiv1(ShakeUI)
+    local LocalPlayer = Players.LocalPlayer
+    local SafeZone = ShakeUI:WaitForChild("safezone", 1)
+        
+    if not SafeZone then return end
+    local Connection
+    Connection = SafeZone.ChildAdded:Connect(function(Child)
+        if Child:IsA("ImageButton") then
+            Child.Selectable = true
+            GuiService.SelectedObject = Child
+            for i = 1, 1 do
+                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, game)
+                task.wait(0.1)
+                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, game)
+            end
+        end
+    end)
+end
+
+function Collection:ShakeUiv2(ShakeUI)
+    local LocalPlayer = Players.LocalPlayer
+    local SafeZone = ShakeUI:WaitForChild("safezone", 1)
+        
+    if not SafeZone then return end
+    local Connection
+    Connection = SafeZone.ChildAdded:Connect(function(Child)
+        if Child:IsA("ImageButton") then
+            Child.Selectable = true
+            GuiService.SelectedObject = Child
+            for i = 1, 1 do
+                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, game)
+                task.wait(0.1)
+                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, game)
+            end
+        end
+    end)
+    local heartbeatConnection = RunService.Heartbeat:Connect(function()
+        for _, child in pairs(SafeZone:GetChildren()) do
+            if child:IsA("ImageButton") then
+                child.Selectable = true
+                GuiService.SelectedObject = child
+                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, game)
+                task.wait(0.1)
+                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, game)
+            end
+        end
+    end)
+    task.spawn(function()
+        while SafeZone and SafeZone:IsDescendantOf(LocalPlayer.PlayerGui) do
+            task.wait(0.1)
+        end
+        if Connection then Connection:Disconnect() end
+        if renderConnection then renderConnection:Disconnect() end
+        if heartbeatConnection then heartbeatConnection:Disconnect() end
+        GuiService.SelectedObject = nil
+    end)
+end
+
+function Collection:ShakeUiv3(ShakeUI)
+    local LocalPlayer = Players.LocalPlayer
+    local SafeZone = ShakeUI:WaitForChild("safezone", 1)
+        
+    if not SafeZone then return end
+    local Connection
+    Connection = SafeZone.ChildAdded:Connect(function(Child)
+        if Child:IsA("ImageButton") then
+            Child.Selectable = true
+            GuiService.SelectedObject = Child
+            for i = 1, 1 do
+                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, game)
+                task.wait(0.1)
+                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, game)
+            end
+        end
+    end)
+    local renderConnection = RunService.RenderStepped:Connect(function()
+        for _, child in pairs(SafeZone:GetChildren()) do
+            if child:IsA("ImageButton") then
+                child.Selectable = true
+                GuiService.SelectedObject = child
+                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, game)
+                task.wait(0.1)
+                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, game)
+            end
+        end
+    end)
+    local heartbeatConnection = RunService.Heartbeat:Connect(function()
+        for _, child in pairs(SafeZone:GetChildren()) do
+            if child:IsA("ImageButton") then
+                child.Selectable = true
+                GuiService.SelectedObject = child
+                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, game)
+                task.wait(0.1)
+                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, game)
+            end
+        end
+    end)
+    task.spawn(function()
+        while SafeZone and SafeZone:IsDescendantOf(LocalPlayer.PlayerGui) do
+            task.wait(0.1)
+        end
+        if Connection then Connection:Disconnect() end
+        if renderConnection then renderConnection:Disconnect() end
+        if heartbeatConnection then heartbeatConnection:Disconnect() end
+        GuiService.SelectedObject = nil
+    end)
+end
+
+function Collection:ShakeUiZ(ShakeUI)
+    local SafeZone = ShakeUI:WaitForChild("safezone", 1)
+    if not SafeZone then return end
+
+    local Connection, heartbeatConnection
+    local pressing = false
+
+    local function pressButton(button)
+        if pressing then return end
+        pressing = true
+        button.Selectable = true
+        GuiService.SelectedObject = button
+        for i = 1, 1 do
+            VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, game)
+            task.wait(0.1)
+            VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, game)
+        end
+        pressing = false
+    end
+
+    Connection = SafeZone.ChildAdded:Connect(function(child)
+        if child:IsA("ImageButton") then
+            pressButton(child)
+        end
+    end)
+    heartbeatConnection = RunService.Heartbeat:Connect(function()
+        local buttons = {}
+        for _, child in pairs(SafeZone:GetChildren()) do
+            if child:IsA("ImageButton") then
+                table.insert(buttons, child)
+            end
+        end
+        for _, btn in pairs(buttons) do
+            pressButton(btn)
+        end
+    end)
+    task.spawn(function()
+        while SafeZone and SafeZone:IsDescendantOf(LocalPlayer.PlayerGui) do
+            task.wait(0.1)
+        end
+        if Connection then Connection:Disconnect() end
+        if heartbeatConnection then heartbeatConnection:Disconnect() end
+        GuiService.SelectedObject = nil
+    end)
+end
+
+function Collection:ShakeUiv5(ShakeUI)
+    local SafeZone = ShakeUI:WaitForChild("safezone", 1)
+    if not SafeZone then return end
+
+    local alive = true
+    local conn
+
+    local function press(button)
+        if not alive or not button or not button.Parent then return end
+        button.Selectable = true
+        GuiService.SelectedObject = button
+        for i = 1, 1 do
+            VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, game)
+            VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, game)
+        end
+    end
+    for _, child in ipairs(SafeZone:GetChildren()) do
+        if child:IsA("ImageButton") then
+            press(child)
+        end
+    end
+    conn = SafeZone.ChildAdded:Connect(function(child)
+        if child:IsA("ImageButton") then
+            press(child)
+        end
+    end)
+
+    task.spawn(function()
+        while alive and SafeZone:IsDescendantOf(LocalPlayer.PlayerGui) do
+            task.wait(0.1)
+        end
+        alive = false
+        if conn then conn:Disconnect() end
+        GuiService.SelectedObject = nil
+    end)
+end
+
+
+function NoClip()
+    local LocalPlayer = Players.LocalPlayer
+    local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+	for _, part in ipairs(Character:GetDescendants()) do
+		if part:IsA("BasePart") then
+			part.CanCollide = false
+		end
+	end
+end
+
+function Collection:findItem(tem)
+    local LocalPlayer = Players.LocalPlayer
+    local backpack = LocalPlayer:WaitForChild("Backpack")
+    local character = LocalPlayer.Character
+    for _, tool in ipairs(character:GetChildren()) do
+        if tool:IsA("Tool") and tool.Name:lower():find(tem:lower()) then
+            return tool
+        end
+    end
+    for _, tool in ipairs(backpack:GetChildren()) do
+        if tool:IsA("Tool") and tool.Name:lower():find(tem:lower()) then
+            return tool
+        end
+    end
+    return nil
+end
+
+function Collection:equipItem(tem)
+    local LocalPlayer = Players.LocalPlayer
+    local item = Collection:findItem(tem)
+    local humanoid = LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+    
+    if item and humanoid and item.Parent == LocalPlayer:FindFirstChild("Backpack") then
+        humanoid:equipTool(item)
+	end
+end
+
+function Collection:findHeldItem()
+    local LocalPlayer = Players.LocalPlayer
+    local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+
+    local heldItem = character:FindFirstChildOfClass("Tool")
+    if heldItem then
+        return heldItem
+    end
+end
+
+function Collection:getPlayerStats()
+    local LocalPlayer = Players.LocalPlayer
+    return workspace:FindFirstChild("PlayerStats"):FindFirstChild(LocalPlayer.Name):FindFirstChild("T"):FindFirstChild(LocalPlayer.Name) 
+end
+
+function Collection:rodName()
+    local LocalPlayer = Players.LocalPlayer
+    local PlayerStats = workspace:FindFirstChild("PlayerStats"):FindFirstChild(LocalPlayer.Name):FindFirstChild("T"):FindFirstChild(LocalPlayer.Name)
+    return PlayerStats:FindFirstChild("Stats"):FindFirstChild("rod").Value
+end
+
+function Collection:equipRod()
+    Collection:equipItem(Collection:rodName())
+end
+
+function Collection:unequipTools()
+    local LocalPlayer = Players.LocalPlayer
+    local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+    local humanoid = character:FindFirstChildOfClass("Humanoid")
+    humanoid:UnequipTools()
+end
+
+local ReelController = require(game:GetService("ReplicatedStorage").client.legacyControllers.ReelController)
+
+local originalNew = ReelController.new
+
+ReelController.new = function(...)
+    local instance = originalNew(...)
+
+    instance.barSize = 1.0
+    instance.minBarSize = 1.0
+    instance.barPosition = 0.5
+
+    local originalUpdate = instance.Update
+
+    function instance:Update(...)
+        local result = originalUpdate(self, ...)
+
+        self.barSize = 1.0
+        self.minBarSize = 1.0
+        self.barPosition = 0.5
+        
+        return result
+    end
+    
+    return instance
+end
+
+local isReeling = false
+
+local function getRod()
+	local Character = LocalPlayer.Character
+	local Backpack = LocalPlayer:FindFirstChild("Backpack")
+
+	if Character then
+		for _,v in pairs(Character:GetChildren()) do
+			if v:IsA("Tool") and v:FindFirstChild("events") then
+				return v
+			end
+		end
+	end
+
+	if Backpack then
+		for _,v in pairs(Backpack:GetChildren()) do
+			if v:IsA("Tool") and v:FindFirstChild("events") then
+				return v
+			end
+		end
+	end
+end
+
+function Collection:castRod(rod)
+    task.spawn(function()
+        while getgenv().Settings.Fisching["Enable Cast Rod"] do
+            local rod = getRod()
+            if rod and not rod:FindFirstChild("bobber") then
+
+                local power
+                if getgenv().Settings.Fisching["Choose Cast Mode"] == "Perfect" then
+                    power = 100
+                else
+                    power = math.random(50, 100)
+                end
+
+                pcall(function()
+                    CastRemote:InvokeServer(power, true)
+                end)
+
+            end
+            task.wait()
+        end
+    end)
+end
+
+function Collection:InstantReel()
+    if finishing then return end
+    finishing = true
+
+    local reelGui
+    local start = tick()
+
+    repeat
+        reelGui = PlayerGui:FindFirstChild("reel")
+        task.wait(0.1)
+    until reelGui or tick() - start > 3
+
+    if not reelGui then
+        finishing = false
+        return
+    end
+
+    task.wait(math.max(0.15, 1))
+    if not reelGui.Parent then
+        finishing = false
+        return
+    end
+
+    ReplicatedStorage:WaitForChild("packages"):WaitForChild("Net"):WaitForChild("RE/Reel/Finish"):FireServer({e = 100, p = true, l = {} })
+
+    local Backpack = Players.LocalPlayer:WaitForChild("Backpack")
+    local destroyed = false
+
+    local conn
+    conn = Backpack.ChildAdded:Connect(function(item)
+        if destroyed then return end
+        destroyed = true
+
+        if reelGui and reelGui.Parent then
+            reelGui:Destroy()
+        end
+
+        finishing = false
+        conn:Disconnect()
+    end)
+
+    task.delay(1, function()
+        if not destroyed then
+            if reelGui and reelGui.Parent then
+                reelGui:Destroy()
+            end
+            finishing = false
+            if conn then conn:Disconnect() end
+        end
+    end)
+end
+
+function Collection:ReelMinigamev1()
+    local LocalPlayer = Players.LocalPlayer
+    if LocalPlayer.PlayerGui:FindFirstChild("reel") then
+        task.wait(1.5)
+        local args = {
+            {
+                e = 100,
+                p = false,
+                l = {},
+                d = {}
+            }
+        }
+        game:GetService("ReplicatedStorage"):WaitForChild("packages"):WaitForChild("Net"):WaitForChild("RE/Reel/Finish"):FireServer(unpack(args))
+    end
+end
+
+function Collection:ReelMinigamev2()
+    local LocalPlayer = Players.LocalPlayer
+    if LocalPlayer.PlayerGui:FindFirstChild("reel") then
+        task.wait(1.5)
+        local args = {
+            {
+                e = 100,
+                p = false,
+                l = {},
+                d = {}
+            }
+        }
+        game:GetService("ReplicatedStorage"):WaitForChild("packages"):WaitForChild("Net"):WaitForChild("RE/Reel/Finish"):FireServer(unpack(args))
+    end
+end
+
+local finishing = false
+
+function Collection:ReelMinigamev3()
+    if finishing then return end
+    finishing = true
+
+    local reelGui
+    local start = os.clock()
+
+    repeat
+        reelGui = PlayerGui:FindFirstChild("reel")
+        task.wait(0.1)
+    until reelGui or os.clock() - start > 3
+
+    if not reelGui then
+        finishing = false
+        return
+    end
+
+    task.wait(0.2)
+
+    if not reelGui.Parent then
+        finishing = false
+        return
+    end
+
+    local args = {
+        {
+            e = 100,
+            p = false,
+            l = {},
+            d = {}
+        }
+    }
+    game:GetService("ReplicatedStorage"):WaitForChild("packages"):WaitForChild("Net"):WaitForChild("RE/Reel/Finish"):FireServer(unpack(args))
+
+    local cleaned = false
+    local conn
+
+    local function cleanup()
+        if cleaned then return end
+        cleaned = true
+
+        if reelGui and reelGui.Parent then
+            reelGui:Destroy()
+        end
+
+        finishing = false
+        if conn then conn:Disconnect() end
+    end
+
+    conn = Backpack.ChildAdded:Connect(function()
+        cleanup()
+    end)
+
+    task.delay(1, cleanup)
+end
+
+local finishing2 = false
+
+function Collection:FastestFishing()
+    if finishing2 then return end
+    finishing2 = true
+
+    local LocalPlayer = Players.LocalPlayer
+    local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+    local Backpack = LocalPlayer:WaitForChild("Backpack")
+
+    local reelGui
+    local start = os.clock()
+
+    repeat
+        reelGui = PlayerGui:FindFirstChild("reel")
+        RunService.Heartbeat:Wait()
+    until reelGui or os.clock() - start > 2
+
+    if not reelGui then
+        finishing2 = false
+        return
+    end
+
+    RunService.Heartbeat:Wait()
+
+    if not reelGui.Parent then
+        finishing2 = false
+        return
+    end
+
+    local args = {
+        {
+            e = 100,
+            p = false,
+            l = {},
+            d = {}
+        }
+    }
+    game:GetService("ReplicatedStorage"):WaitForChild("packages"):WaitForChild("Net"):WaitForChild("RE/Reel/Finish"):FireServer(unpack(args))
+
+    local cleaned = false
+    local conn
+
+    local function cleanup()
+        if cleaned then return end
+        cleaned = true
+
+        if reelGui and reelGui.Parent then
+            reelGui:Destroy()
+        end
+
+        finishing2 = false
+        if conn then conn:Disconnect() end
+    end
+
+    conn = Backpack.ChildAdded:Connect(cleanup)
+
+    task.delay(1, cleanup)
+end
+
+local finishing4 = false
+
+function Collection:ReelMinigamev4()
+    if finishing4 then 
+        return 
+    end
+    finishing4 = true
+
+    local Backpack = LocalPlayer:WaitForChild("Backpack")
+
+    local reelGui
+    local start = os.clock()
+
+    repeat
+        reelGui = PlayerGui:FindFirstChild("reel")
+        task.wait()
+    until reelGui or os.clock() - start > 2
+
+    if not reelGui then
+        finishing4 = false
+        return
+    end
+
+    local fired = false
+    local cleaned = false
+    local connChild, connBackpack
+
+    local function finish()
+        if fired then 
+            return 
+        end
+
+        fired = true
+
+        local args = {
+            {
+                e = 100,
+                p = false,
+                l = {},
+                d = {}
+            }
+        }
+        game:GetService("ReplicatedStorage"):WaitForChild("packages"):WaitForChild("Net"):WaitForChild("RE/Reel/Finish"):FireServer(unpack(args))
+    end
+
+    local function cleanup()
+        if cleaned then 
+            return 
+        end
+        cleaned = true
+
+        if reelGui and reelGui.Parent then
+            reelGui:Destroy()
+        end
+
+        finishing4 = false
+        if connChild then 
+            connChild:Disconnect() 
+        end
+        if connBackpack then 
+            connBackpack:Disconnect() 
+        end
+    end
+
+    connChild = reelGui.ChildAdded:Connect(function()
+        finish()
+    end)
+
+    if #reelGui:GetChildren() > 0 then
+        finish()
+    end
+
+    connBackpack = Backpack.ChildAdded:Connect(cleanup)
+
+    task.delay(1, cleanup)
+end
+
+
+function Collection:modifyReelUi(ui)
+    if not ui then return end
+    local bar = ui:FindFirstChild("bar")
+    if not bar then return end
+    local playerbar = bar:FindFirstChild("playerbar")
+    if not playerbar then return end
+    playerbar.Size = UDim2.new(
+        (playerbar.Size.X.Scale + 0.625) * 1, 0,
+        playerbar.Size.Y.Scale, 0
+    )
+end
+
+function ChangeAvatar()
+    local LocalPlayer = Players.LocalPlayer
+    local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+
+    local randomColor = Color3.fromRGB(
+        math.random(0, 255),
+        math.random(0, 255),
+        math.random(0, 255)
+    )
+
+    for _, obj in ipairs(character:GetChildren()) do
+        if obj:IsA("Accessory") or obj:IsA("Clothing") or obj:IsA("ShirtGraphic") then
+            obj:Destroy()
+        end
+    end
+
+    for _, obj in ipairs(character:GetChildren()) do
+        if obj:IsA("MeshPart") or obj:IsA("Part") then
+            obj.Color = randomColor
+            obj.Material = Enum.Material.SmoothPlastic
+
+            local decal = obj:FindFirstChildWhichIsA("Decal")
+            if decal then decal:Destroy() end
+
+            for _, child in ipairs(obj:GetChildren()) do
+                if child:IsA("SpecialMesh") then
+                    child:Destroy()
+                end
+            end
+        end
+    end
+
+    local Head = character:FindFirstChild("Head")
+    local Torso = character:FindFirstChild("Torso")
+    local RightLeg = character:FindFirstChild("Right Leg")
+    local LeftLeg = character:FindFirstChild("Left Leg")
+    local RightArm = character:FindFirstChild("Right Arm")
+    local LeftArm = character:FindFirstChild("Left Arm")
+
+    if not (Head and Torso and RightLeg and LeftLeg and RightArm and LeftArm) then return end
+
+    local function addMesh(part, scale, offset)
+        local mesh = Instance.new("SpecialMesh")
+        mesh.MeshId = "rbxassetid://112170046286421"
+        mesh.MeshType = Enum.MeshType.FileMesh
+        mesh.Scale = scale
+        mesh.Offset = offset or Vector3.zero
+        mesh.Parent = part
+        return mesh
+    end
+
+    local headMesh = addMesh(Head, Vector3.new(1.5,1.5,1.5), Vector3.new(0,0.3,0))
+    headMesh.TextureId = "rbxassetid://99764942615873"
+
+    addMesh(Torso, Vector3.new(1.3,2,1))
+    addMesh(RightLeg, Vector3.new(0.9,2,0.9))
+    addMesh(LeftLeg, Vector3.new(0.9,2,0.9))
+
+    addMesh(RightArm, Vector3.new(0.6,1.4,0.6), Vector3.new(-0.5,0.1,0))
+    addMesh(LeftArm, Vector3.new(0.6,1.4,0.6), Vector3.new(0.5,0.1,0))
+end
+
+function Collection:EnableSecurity(state)
+    if state and getgenv().Settings.Setup["Protect User"] then
+        pcall(function()
+            local LocalPlayer = Players.LocalPlayer
+            local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+            local hrp = character:FindFirstChild("HumanoidRootPart")
+            
+            local userui = hrp:FindFirstChild("user")
+            local protectList = {
+                { Obj = userui.level, Text = "Security Level" },
+                { Obj = userui.user, Text = "Security" },
+                { Obj = userui.streak, Text = "Security Streak", Color = Color3.fromRGB(0, 229, 255) },
+                { Obj = userui.streak, Text = "Security User", Color = Color3.fromRGB(0, 229, 255) },
+                { Obj = LocalPlayer.PlayerGui.hud.safezone.coins, Text = "Security C$" },
+                { Obj = LocalPlayer.PlayerGui.hud.safezone.lvl, Text = "Security Level" }
+            }
+            if getgenv().Settings.Setup["Protect User"] then
+                ChangeAvatar()
+                for _, v in pairs(protectList) do
+                    local obj = v.Obj
+                    if obj.ClassName == "TextLabel" then
+                        obj.Text = v.Text
+                        if v.Color then
+                            obj.TextColor3 = v.Color
+                        end
+                        obj:GetPropertyChangedSignal("Text"):Connect(function()
+                            if getgenv().protect_User and obj.Text ~= v.Text then
+                                obj.Text = v.Text
+                            end
+                        end)
+                    end
+                end
+                LocalPlayer.PlayerGui.hud.safezone.StatChangeList.ChildAdded:Connect(function(child)
+                    if getgenv().protect_User then
+                        child.Text = string.format("+%s Aura", tostring(math.random(1, 1000)))
+                        child.TextColor3 = Color3.fromRGB(0, 229, 255)
+                    end
+                end)
+            end
+        end)
+    end
+end
+
+function Collection:disableAnimation()
+    local LocalPlayer = Players.LocalPlayer
+    local character = LocalPlayer.Character
+    if not character then return end
+
+    local humanoid = character:FindFirstChildOfClass("Humanoid")
+    if not humanoid then return end
+
+    local animator = humanoid:FindFirstChildOfClass("Animator")
+    if not animator then return end
+
+    if getgenv().Settings.Setup["Disable Animation"] then
+        for _, track in pairs(animator:GetPlayingAnimationTracks()) do
+            track:Stop()
+        end
+        if _v.disableAnimationConn then
+            disableAnimationConn:Disconnect()
+        end
+        _v.disableAnimationConn = animator.AnimationPlayed:Connect(function(track)
+            if getgenv().Settings.Setup["Disable Animation"] then
+                track:Stop()
+            end
+        end)
+    else
+        if _v.disableAnimationConn then
+            _v.disableAnimationConn:Disconnect()
+            _v.disableAnimationConn = nil
+        end
+    end
+end
+
+local flyEnabled = false
+local flySpeed = 48
+local bodyVelocity, bodyGyro
+local flightConnection
+
+function Collection:Fly(state)
+    flyEnabled = state
+    local LocalPlayer = Players.LocalPlayer
+    if flyEnabled then
+        local character = LocalPlayer.Character
+        if not character or not character:FindFirstChild("HumanoidRootPart") then return end
+        
+        local humanoid = character:FindFirstChildOfClass("Humanoid")
+        if not humanoid then return end
+        
+        bodyGyro = Instance.new("BodyGyro")
+        bodyVelocity = Instance.new("BodyVelocity")
+        bodyGyro.P = 9000
+        bodyGyro.maxTorque = Vector3.new(8999999488, 8999999488, 8999999488)
+        bodyGyro.cframe = character.HumanoidRootPart.CFrame
+        bodyGyro.Parent = character.HumanoidRootPart
+        
+        bodyVelocity.velocity = Vector3.new(0, 0, 0)
+        bodyVelocity.maxForce = Vector3.new(8999999488, 8999999488, 8999999488)
+        bodyVelocity.Parent = character.HumanoidRootPart
+        humanoid.PlatformStand = true
+        
+        flightConnection = RunService.Heartbeat:Connect(function()
+            if not flyEnabled or not character:FindFirstChild("HumanoidRootPart") then
+                if flightConnection then flightConnection:Disconnect() end
+                return
+            end
+            
+            local cam = workspace.CurrentCamera.CFrame
+            local moveVec = Vector3.new()
+            
+            if UserInputService:IsKeyDown(Enum.KeyCode.W) then
+                moveVec = moveVec + cam.LookVector
+            end
+            if UserInputService:IsKeyDown(Enum.KeyCode.S) then
+                moveVec = moveVec - cam.LookVector
+            end
+            if UserInputService:IsKeyDown(Enum.KeyCode.A) then
+                moveVec = moveVec - cam.RightVector
+            end
+            if UserInputService:IsKeyDown(Enum.KeyCode.D) then
+                moveVec = moveVec + cam.RightVector
+            end
+            
+            if moveVec.Magnitude > 0 then
+                moveVec = moveVec.Unit * flySpeed
+            end
+            if UserInputService:IsKeyDown(Enum.KeyCode.Space) then
+                moveVec = moveVec + Vector3.new(0, flySpeed, 0)
+            end
+            if UserInputService:IsKeyDown(Enum.KeyCode.LeftShift) then
+                moveVec = moveVec + Vector3.new(0, -flySpeed, 0)
+            end
+            
+            bodyVelocity.velocity = moveVec
+            bodyGyro.cframe = cam
+        end)
+    else
+        if bodyVelocity then bodyVelocity:Destroy() end
+        if bodyGyro then bodyGyro:Destroy() end
+        
+        local character = LocalPlayer.Character
+        if character then
+            local humanoid = character:FindFirstChildOfClass("Humanoid")
+            if humanoid then
+                humanoid.PlatformStand = false
+            end
+        end
+        
+        if flightConnection then
+            flightConnection:Disconnect()
+            flightConnection = nil
+        end
+    end
+end
+
+local emoji = {
+    Check = utf8.char(0x2705),
+    CrossMark = utf8.char(0x274E)
+}
+
+local status = {
+    spawned = (emoji.Check .. " Spawned"),
+    notSpawned = (emoji.CrossMark .. " Not Spawned")
+}
+
+local poolStatusParagraph = {
+    Megalodon = nil,
+    Kraken = nil,
+    Orca = nil,
+    ["Blue Whale"] = nil,
+    Scylla = nil,
+    Mosslurker = nil,
+    Narwhal = nil,
+    ["Frightful Pool"] = nil,
+}
+
+local poolRegistry = {
+    ["Megalodon Default"] = "Megalodon",
+    ["Megalodon Ancient"] = "Megalodon",
+    ["Megalodon Phantom"] = "Megalodon",
+
+    ["The Kraken Pool"] = "Kraken",
+    ["Orcas Pool"] = "Orca",
+    ["Whales Pool"] = "Blue Whale",
+    ["Forsaken Veil - Scylla"] = "Scylla",
+    ["Mosslurker"] = "Mosslurker",
+
+    ["Narwhal"] = "Narwhal",
+    ["Beluga"] = "Narwhal",
+    ["Magician Narwhal"] = "Narwhal",
+
+    ["FischFright25"] = "Frightful Pool"
+}
+
+function Collection:updatePoolStatus()
+    local fishingZone = workspace.zones.fishing
+    for poolName, pool in pairs(poolRegistry) do
+        local poolParagraph = poolStatusParagraph[pool]
+        local poolInstance = fishingZone:FindFirstChild(poolName)
+        if poolInstance and poolParagraph then
+            local suffix;
+            pcall(function()
+                -- Megalodon
+                if pool == "Megalodon" then
+                    if poolName == "Megalodon Ancient" then suffix = "Ancient"
+                    elseif poolName == "Megalodon Phantom" then suffix = "Phantom" end
+                end
+                -- Blue Whale
+                if pool == "Blue Whale" then
+                    local mobySpawn = poolInstance:FindFirstChild("MobySpawn")
+                    local whale = mobySpawn and mobySpawn:FindFirstChild("Whale")
+                    if whale then
+                        suffix = "Moby"
+                    end
+                end
+                -- Narwhal
+                if pool == "Narwhal" then
+                    suffix = poolName
+                end
+                -- Frightful
+                if pool == "Frightful Pool" then
+                    local PoiTitle = poolInstance.POIHeader.title
+                    suffix = string.match(PoiTitle.Text, "^%S+")
+                end
+            end)
+
+            if suffix then
+                poolParagraph:SetContent(status.spawned .. string.format(" (%s)", gradient(suffix)))
+            else
+                poolParagraph:SetContent(status.spawned)
+            end
+        else
+            poolParagraph:SetContent(status.notSpawned)
+        end
+    end
+end
+
+function Collection:getActivePool()
+    local fishingZone = workspace.zones.fishing
+    local activePool = {}
+    for poolName, pool in pairs(poolRegistry) do
+        local poolInstance = fishingZone:FindFirstChild(poolName)
+        if poolInstance then table.insert(activePool, pool) end
+    end
+    return activePool
+end
+
+function Collection:useItem(tem)
+    local LocalPlayer = Players.LocalPlayer
+    local item = Collection:findItem(tem)
+    local humanoid = LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+    
+    if item and humanoid and item.Parent == LocalPlayer:FindFirstChild("Backpack") then
+        humanoid:equipTool(item)
+	end
+    if item then item:Activate() end
+end
+
+function Hop()
+    while true do
+        local success, body = pcall(function()
+            return game:HttpGet(("https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Asc&limit=100"):format(gameId))
+        end)
+        if success then
+            local data = HttpService:JSONDecode(body)
+            for _, server in ipairs(data.data) do
+                if server.playing < server.maxPlayers and server.id ~= game.JobId then
+                    while true do
+                        pcall(function()
+                            TeleportService:TeleportToPlaceInstance(gameId, server.id, LocalPlayer)
+                        end)
+                        task.wait(0.1)
+                    end
+                end
+            end
+        end
+        task.wait(0.2)
+    end
+end
+
+
+local world = ReplicatedStorage:FindFirstChild("world")
+local server_weather = world:FindFirstChild("weather").Value
+local server_cycle = world:FindFirstChild("cycle").Value
+local server_season = world:FindFirstChild("season").Value
+local server_event = world:FindFirstChild("event").Value
+local server_luck = world:FindFirstChild("luck_Server").Value
+
+
+local Discord = Window:Tab({ Title = "Discord", Icon = "book" })
+local Setup = Window:Tab({ Title = "Setup", Icon = "cog" })
+local General = Window:Tab({ Title = "General", Icon = "fish" })
+local Premium = Window:Tab({ Title = "Premium", Icon = "star" })
+local Farm = Window:Tab({ Title = "Farm", Icon = "accessibility" })
+local Shop = Window:Tab({ Title = "Shop", Icon = "shopping-cart" })
+local Teleport = Window:Tab({ Title = "Teleport", Icon = "tree-palm" })
+local Extra = Window:Tab({ Title = "Extra", Icon = "bug-play" })
+local Visual = Window:Tab({ Title = "Visual & Dupe", Icon = "activity" })
+
+Window:SelectTab(1)
+
+Discord:Section({Title = "Discord"})
+Discord:Button({
+    Title = "Discord Server Link",
+	Desc = "Copy link",
+    Callback = function()
+        setclipboard("https://discord.gg/zyphraxhub")
+    end
+})
+
+Setup:Section({Title = "Save Settings"})
+Setup:Toggle({
+	Title = "Auto Save Settings",
+	Desc = "Save the current settings of the script",
+	Value = getgenv().Settings.Setup["Save Settings"],
+	Callback = function(state)
+        getgenv().Settings.Setup["Save Settings"] = state
+	end
+})
+
+Setup:Section({Title = "Players"})
+Setup:Toggle({
+	Title = "Disable User Infos",
+	Desc = "Project your identity",
+	Value = getgenv().Settings.Setup["Protect User"],
+	Callback = function(state)
+        getgenv().Settings.Setup["Protect User"] = state
+        Collection:EnableSecurity(state)
+        if getgenv().Settings.Setup["Save Settings"] then
+            Collection:SaveSetting()
+        end
+	end
+})
+Setup:Toggle({
+	Title = "Walk On Water",
+	Desc = "Make you able to walk on the water",
+	Value = getgenv().Settings.Setup["Walk On Water"],
+	Callback = function(state)
+        getgenv().Settings.Setup["Walk On Water"] = state
+        if getgenv().Settings.Setup["Save Settings"] then
+            Collection:SaveSetting()
+        end
+	end
+})
+
+task.spawn(function()
+    while task.wait(0.1) do
+        local Success, Error = pcall(function()
+            if getgenv().Settings.Setup["Walk On Water"] then
+                if not getgenv().Settings.Setup["Walk On Water"] then return end
+                for i, v in pairs(workspace.zones.fishing:GetChildren()) do
+                    if not getgenv().Settings.Setup["Walk On Water"] then
+                        v.CanCollide = false
+                    else
+                        v.CanCollide = true
+                    end
+                end
+            end
+        end)
+        if not Success then
+            task.wait(3)
+            warn("Error Walk On Water : " .. Error)
+        end
+    end
+end)
+
+Setup:Toggle({
+	Title = "Disable Animation",
+	Desc = "Disable All your character animations",
+	Value = getgenv().Settings.Setup["Disable Animation"],
+	Callback = function(state)
+        getgenv().Settings.Setup["Disable Animation"] = state
+        if getgenv().Settings.Setup["Save Settings"] then
+            Collection:SaveSetting()
+        end
+	end
+})
+
+local oldPos = nil
+
+task.spawn(function()
+    while task.wait() do
+        local Success, Error = pcall(function()
+            if getgenv().Settings.Setup["Disable Animation"] then
+                local LocalPlayer = Players.LocalPlayer
+                local character = LocalPlayer.Character
+                local hrp = character:FindFirstChild("HumanoidRootPart")
+				if oldPos == nil then
+					oldPos = hrp.CFrame
+				end
+				hrp.CFrame = oldPos
+				hrp.Velocity = Vector3.zero
+            end
+        end)
+    end
+end)
+
+Setup:Toggle({
+	Title = "Disable Clip",
+	Desc = "Make you unnable to be clipped",
+	Value = getgenv().Settings.Setup["Disable Clip"],
+	Callback = function(state)
+        getgenv().Settings.Setup["Disable Clip"] = state
+        if state then
+			NoClipConn = RunService.Stepped:Connect(NoClip)
+		elseif NoClipConn then
+		    NoClipConn:Disconnect()
+			NoClipConn = nil
+		end
+        if getgenv().Settings.Setup["Save Settings"] then
+            Collection:SaveSetting()
+        end
+	end
+})
+Setup:Toggle({
+	Title = "Enable Fly",
+	Desc = "Make you fly around the map",
+	Value = getgenv().Settings.Setup["Enable Fly"],
+	Callback = function(state)
+        getgenv().Settings.Setup["Enable Fly"] = state
+		Collection:Fly(state)
+        if getgenv().Settings.Setup["Save Settings"] then
+            Collection:SaveSetting()
+        end
+	end
+})
+Setup:Toggle({
+	Title = "Enable Radar",
+	Desc = "Enable your radar detector",
+	Value = false,
+	Callback = function(state)
+        getgenv().Radar = state
+        for _, radar in pairs(game:GetService("CollectionService"):GetTagged("radarTag")) do
+            if radar:IsA("BillboardGui") or radar:IsA("SurfaceGui") then
+                radar.Enabled = getgenv().Radar
+            end
+        end
+	end
+})
+
+General:Section({Title = "Modification"})
+General:Dropdown({
+    Title = "Select Cast Method",
+    Multi = false,
+    AllowNone = false,
+    Values = {"Remote", "Virtual Input"},
+    Value = getgenv().Settings.Setup["Choose Cast Method"],
+    Callback = function(selected)
+        getgenv().Settings.Setup["Choose Cast Method"] = selected
+        if getgenv().Settings.Setup["Save Settings"] then
+            Collection:SaveSetting()
+        end
+    end
+})
+General:Dropdown({
+    Title = "Select Cast Mode",
+    Multi = false,
+    AllowNone = false,
+    Values = {"Perfect", "Random"},
+    Value = getgenv().Settings.Setup["Choose Cast Mode"] or "Perfect",
+    Callback = function(selected)
+        getgenv().Settings.Setup["Choose Cast Mode"] = selected
+        if getgenv().Settings.Setup["Save Settings"] then
+            Collection:SaveSetting()
+        end
+    end
+})
+General:Dropdown({
+    Title = "Select Shake Method",
+    Multi = false,
+    AllowNone = false,
+    Values = {"Slow", "Normal", "Semi-Fast", "Fast", "Super Fast"},
+    Value = getgenv().Settings.Setup["Choose Shake Method"],
+    Callback = function(selected)
+        getgenv().Settings.Setup["Choose Shake Method"] = selected
+        if getgenv().Settings.Setup["Save Settings"] then
+            Collection:SaveSetting()
+        end
+    end
+})
+General:Dropdown({
+    Title = "Select Reel Method",
+    Multi = false,
+    AllowNone = false,
+    Values = {"Slow", "Normal", "Semi-Fast", "Fast", "Instant", "Super Instant"},
+    Value = getgenv().Settings.Setup["Choose Reel Method"],
+    Callback = function(selected)
+        getgenv().Settings.Setup["Choose Reel Method"] = selected
+        if getgenv().Settings.Setup["Save Settings"] then
+            Collection:SaveSetting()
+        end
+    end
+})
+General:Dropdown({
+    Title = "Select Bobber Method",
+    Multi = false,
+    AllowNone = false,
+    Values = {"v1", "v2"},
+    Value = getgenv().Settings.Setup["Choose Bobber Method"],
+    Callback = function(selected)
+        getgenv().Settings.Setup["Choose Bobber Method"] = selected
+        if getgenv().Settings.Setup["Save Settings"] then
+            Collection:SaveSetting()
+        end
+    end
+})
+
+General:Toggle({
+	Title = "Active Instant Bobber",
+	Desc = "Automatically place the bobber in the water.",
+	Value = getgenv().Settings.Fisching["Enable Instant Bobber"],
+	Callback = function(state)
+       getgenv().Settings.Fisching["Enable Instant Bobber"] = state
+        if getgenv().Settings.Setup["Save Settings"] then
+            Collection:SaveSetting()
+        end
+	end
+})
+
+task.spawn(function()
+    while task.wait(0.15) do
+        local Success, Error = pcall(function()
+            if getgenv().Settings.Fisching["Enable Instant Bobber"] then
+                local rod = Collection:findHeldItem()
+
+                if rod and rod.Name == Collection:rodName() then
+                    local bobber = rod:FindFirstChild("bobber")
+                    if bobber then
+                        local LocalPlayer = Players.LocalPlayer
+                        local character = LocalPlayer.Character
+                        local hrp = c
